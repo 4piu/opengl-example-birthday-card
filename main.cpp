@@ -1,27 +1,68 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 
-void helloWorld();
+#define APP_WIDTH 720
+#define APP_HEIGHT 960
+
+void display();
+
+void reshape_handler(int, int);
+
+void timer_handler(int);
+
+void keyboard_handler(unsigned char, int, int);
+
+void mouse_handler(int, int, int, int);
 
 int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DEPTH | GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(320, 320);
-    glutCreateWindow("Hello World");
-    glutDisplayFunc(helloWorld);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+    glutInitWindowSize(APP_WIDTH, APP_HEIGHT);  // set window size
+    glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - APP_WIDTH) / 2,
+                           (glutGet(GLUT_SCREEN_HEIGHT) - APP_HEIGHT) / 2); // center the window
+    glutCreateWindow("Happy Birthday!");    // window title
+
+    // set callbacks
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape_handler);
+    glutTimerFunc(0, timer_handler, 0);
+    glutKeyboardFunc(keyboard_handler);
+    glutMouseFunc(mouse_handler);
+
     glutMainLoop();
     return 0;
 }
 
-void helloWorld() {
-    // Clear the buffer to the predefined color and depth value
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //Move origin of current user coordinate system to the screen center: similar to a reset operation
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
-    glBegin(GL_TRIANGLES); // Start draw TRIANGLE function
-    glVertex3f(-0.5, -0.5, 0.0); // Set coordinates of first vertex
-    glVertex3f(0.5, -0.5, 0.0); // Set coordinates of second vertex
-    glVertex3f(0.0, 0.5, 0.0); // Set coordinates of last vertex
-    glEnd(); // End draw TRIANGLE function
-    glutSwapBuffers(); // Refresh the screen to display the graphics
+
+    glBegin(GL_TRIANGLES);
+    glVertex2d(-10, -10);
+    glVertex2d(10, -10);
+    glVertex2d(0, 8);
+    glEnd();
+
+    glutSwapBuffers();
 }
+
+void keyboard_handler(unsigned char key, int x, int y) {
+
+}
+
+void mouse_handler(int btn, int state, int x, int y) {
+
+}
+
+void reshape_handler(int w, int h) {
+    glViewport(0, 0, w, h); // set viewport
+    glMatrixMode(GL_PROJECTION); // change matrix mode
+    glLoadIdentity();   // reset projection matrix
+    gluOrtho2D(-100, 100, -100, 100);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void timer_handler(int) {
+    glutTimerFunc(1000 / 60, timer_handler, 0);
+}
+
