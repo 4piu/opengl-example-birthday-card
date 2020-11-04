@@ -70,8 +70,10 @@ void mouse_handler(int btn, int state, int x, int y) {
 
 void motion_handler(int x, int y) {
     // track mouse pointer position
-    mouse_pointer.x = (float) x / APP_WIDTH * (ORTHO_R - ORTHO_L) - (ORTHO_R - ORTHO_L) / 2;
-    mouse_pointer.y = (1 - (float) y / APP_HEIGHT) * (ORTHO_T - ORTHO_B) - (ORTHO_T - ORTHO_B) / 2;
+    mouse_pointer.x =
+            (float) x / (float) glutGet(GLUT_WINDOW_WIDTH) * (ORTHO_R - ORTHO_L) - (ORTHO_R - ORTHO_L) / 2;
+    mouse_pointer.y =
+            (1 - (float) y / (float) glutGet(GLUT_WINDOW_HEIGHT)) * (ORTHO_T - ORTHO_B) - (ORTHO_T - ORTHO_B) / 2;
 }
 
 void reshape_handler(int w, int h) {
