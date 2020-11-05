@@ -2,6 +2,8 @@
 #include <GL/glut.h>
 #include <cmath>
 
+// macros
+
 #define APP_WIDTH 720
 #define APP_HEIGHT 960
 
@@ -19,6 +21,8 @@ typedef struct {
         TRIANGLE, CIRCLE, SQUARE
     } shape;
 } floral;
+
+// function declarations
 
 void use_absolute_cs();
 
@@ -41,6 +45,9 @@ void draw_floral(floral);
 void draw_background();
 
 void draw_pointer();
+
+// global vars
+point mouse_pointer = {0, 0};
 
 int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
@@ -66,8 +73,6 @@ int main(int argc, char *argv[]) {
     glutMainLoop();
     return 0;
 }
-
-point mouse_pointer = {0, 0};
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -96,7 +101,14 @@ void motion_handler(int x, int y) {
 }
 
 void reshape_handler(int w, int h) {
-    glViewport(0, 0, w, h); // set viewport
+    int new_w = w, new_h = h;
+    if ((float) w / (float) h > (float) APP_WIDTH / (float) APP_HEIGHT) {
+        new_w = (int) ((float) h * (float) APP_WIDTH / (float) APP_HEIGHT);
+    } else if ((float) w / (float) h < (float) APP_WIDTH / (float) APP_HEIGHT) {
+        new_h = (int) ((float) w / (float) APP_WIDTH * (float) APP_HEIGHT);
+    }
+    glViewport((w - new_w) / 2, (h - new_h) / 2, new_w, new_h); // set viewport
+    glutReshapeWindow(new_w, new_h);    // force shape window to specified ratio
 }
 
 void timer_handler(int) {
@@ -114,35 +126,6 @@ void draw_background() {
     glVertex2f(1, 0);
     glVertex2f(0, 0);
     glEnd();
-
-    //TODO test
-    floral f0 = {
-            point{360, 100},
-            5,
-            45,
-            {1, 0, 0},
-            .5,
-            floral::SQUARE
-    };
-    floral f1 = {
-            point{360, 300},
-            5,
-            45,
-            {0, 1, 0},
-            .5,
-            floral::TRIANGLE
-    };
-    floral f2 = {
-            point{360, 600},
-            5,
-            0,
-            {0, 0, 1},
-            .5,
-            floral::CIRCLE
-    };
-    draw_floral(f0);
-    draw_floral(f1);
-    draw_floral(f2);
 }
 
 void draw_pointer() {
