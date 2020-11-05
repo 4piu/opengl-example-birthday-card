@@ -5,14 +5,15 @@
 #include <functional>
 
 // macros
+#define PI 3.14159265358979323846
 
 #define APP_WIDTH 720
 #define APP_HEIGHT 960
 
-#define FLORAL_COUNT 100
-#define FLORAL_MARGIN 10
-#define FLORAL_SIZE_MIN 3
-#define FLORAL_SIZE_MAX 8
+#define FLORAL_COUNT 200
+#define FLORAL_MARGIN 20
+#define FLORAL_SIZE_MIN 8
+#define FLORAL_SIZE_MAX 12
 
 typedef struct {
     GLfloat x, y;
@@ -87,7 +88,6 @@ int main(int argc, char *argv[]) {
     // enable blend (rgba and smooth support)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     // init global vars
     init_floral();
 
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
 }
 
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
+//    glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
     draw_background();
@@ -227,9 +227,36 @@ void init_floral() {
         // random rotation
         ptr->rotation = random_float(-180, 180);
         // random color
-        ptr->color[0] = random_float(0, 1);
-        ptr->color[1] = random_float(0, 1);
-        ptr->color[2] = random_float(0, 1);
+//        ptr->color[0] = random_float(0, 1);
+//        ptr->color[1] = random_float(0, 1);
+//        ptr->color[2] = random_float(0, 1);
+        switch (random_int(0,4)) {
+            case 0:
+                ptr->color[0] = 224 /255.0;
+                ptr->color[1] = 27 /255.0;
+                ptr->color[2] = 57 /255.0;
+                break;
+            case 1:
+                ptr->color[0] = 235 /255.0;
+                ptr->color[1] = 100 /255.0;
+                ptr->color[2] = 28 /255.0;
+                break;
+            case 2:
+                ptr->color[0] = 227 /255.0;
+                ptr->color[1] = 180 /255.0;
+                ptr->color[2] = 9 /255.0;
+                break;
+            case 3:
+                ptr->color[0] = 18 /255.0;
+                ptr->color[1] = 130 /255.0;
+                ptr->color[2] = 46 /255.0;
+                break;
+            case 4:
+                ptr->color[0] = 9 /255.0;
+                ptr->color[1] = 52 /255.0;
+                ptr->color[2] = 145 /255.0;
+                break;
+        }
         // random alpha
         ptr->alpha = random_float(.2, 1);
         // random Shape
