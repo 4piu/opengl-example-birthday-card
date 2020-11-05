@@ -212,8 +212,8 @@ void init_floral() {
     floral *end_ptr = bk_decorations + sizeof(bk_decorations) / sizeof(bk_decorations[0]);
     while (ptr < end_ptr) {
         // random position
-        ptr->coordinator.x = random_int(FLORAL_MARGIN, APP_WIDTH);
-        ptr->coordinator.y = random_int(FLORAL_MARGIN, APP_HEIGHT);
+        ptr->coordinator.x = random_int(FLORAL_MARGIN, APP_WIDTH - FLORAL_MARGIN);
+        ptr->coordinator.y = random_int(FLORAL_MARGIN, APP_HEIGHT - FLORAL_MARGIN);
         // random size
         ptr->size = random_float(FLORAL_SIZE_MIN, FLORAL_SIZE_MAX);
         // random rotation
