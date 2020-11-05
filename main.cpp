@@ -81,7 +81,10 @@ int main(int argc, char *argv[]) {
     glutMotionFunc(motion_handler);
     glutPassiveMotionFunc(motion_handler);
 
-    // enable blend (rgba support)
+    // msaa
+    glEnable(GL_MULTISAMPLE);
+
+    // enable blend (rgba and smooth support)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
