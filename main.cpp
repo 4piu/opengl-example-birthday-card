@@ -182,10 +182,15 @@ void draw_floral(floral *f) {
             glVertex2f(0, f->size);
             break;
         case floral::CIRCLE:
-            glBegin(GL_POINTS);
-            glEnable(GL_POINT_SMOOTH);
-            glPointSize(f->size);
-            glVertex2f(0, 0);
+//            glEnable(GL_POINT_SMOOTH);
+//            glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+//            glBegin(GL_POINTS);
+//            glPointSize(f->size);
+//            glVertex2f(0, 0);
+            glBegin(GL_POLYGON);
+            for (float i = 0; i < 2 * PI; i += PI / 360) {
+                glVertex2f(f->size / 2 * cosf(i), f->size / 2 * sinf(i));
+            }
             break;
     }
     glEnd();
