@@ -1,13 +1,9 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include <cmath>
 
 #define APP_WIDTH 720
 #define APP_HEIGHT 960
-
-#define ORTHO_L -100.0
-#define ORTHO_R 100.0
-#define ORTHO_B -100.0
-#define ORTHO_T 100.0
 
 typedef struct {
     GLfloat x, y;
@@ -40,9 +36,15 @@ void mouse_handler(int, int, int, int);
 
 void motion_handler(int, int);
 
+void draw_floral(floral);
+
+void draw_background();
+
+void draw_pointer();
+
 int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
     glutInitWindowSize(APP_WIDTH, APP_HEIGHT);  // set window size
     glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - APP_WIDTH) / 2,
                            (glutGet(GLUT_SCREEN_HEIGHT) - APP_HEIGHT) / 2); // center the window
@@ -71,20 +73,18 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
-    glPointSize(10);
-    glBegin(GL_POINTS);
-    glVertex2f(mouse_pointer.x, mouse_pointer.y);
-    glEnd();
+    draw_background();
+    draw_pointer();
 
     glutSwapBuffers();
 }
 
 void keyboard_handler(unsigned char key, int x, int y) {
-
+    // TODO
 }
 
 void mouse_handler(int btn, int state, int x, int y) {
-
+    // TODO
 }
 
 void motion_handler(int x, int y) {
