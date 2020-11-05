@@ -56,6 +56,7 @@ int main(int argc, char *argv[]) {
     glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - APP_WIDTH) / 2,
                            (glutGet(GLUT_SCREEN_HEIGHT) - APP_HEIGHT) / 2); // center the window
     glutCreateWindow("Happy Birthday!");    // window title
+    glutSetCursor(GLUT_CURSOR_NONE);    // hide cursor
 
     // set callbacks
     glutDisplayFunc(display);
