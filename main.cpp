@@ -13,6 +13,21 @@ typedef struct {
     GLfloat x, y;
 } point;
 
+typedef struct {
+    point coordinator;
+    float size;
+    float rotation;
+    float color[3];
+    float alpha;
+    enum shape {
+        TRIANGLE, CIRCLE, SQUARE
+    } shape;
+} floral;
+
+void use_absolute_cs();
+
+void use_percentage_cs();
+
 void display();
 
 void reshape_handler(int, int);
