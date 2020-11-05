@@ -2,7 +2,6 @@
 #include <GL/glut.h>
 #include <cmath>
 #include <random>
-#include <functional>
 
 // macros
 #define PI 3.14159265358979323846
@@ -14,13 +13,14 @@
 #define FLORAL_MARGIN 20
 #define FLORAL_SIZE_MIN 8
 #define FLORAL_SIZE_MAX 12
+#define FLORAL_ANIMATION_SPEED .008
 
 typedef struct {
     GLfloat x, y;
 } Point;
 
 typedef struct {
-    Point coordinator;
+    Point position;
     float size;
     float rotation;
     float color[3];
@@ -28,6 +28,7 @@ typedef struct {
     enum Shape {
         TRIANGLE, CIRCLE, SQUARE
     } shape;
+    bool fading;
 } floral;
 
 // function declarations
@@ -35,6 +36,8 @@ typedef struct {
 int random_int(int, int);
 
 float random_float(float, float);
+
+bool random_bool();
 
 void use_absolute_cs();
 
@@ -48,6 +51,8 @@ void timer_handler(int);
 
 void keyboard_handler(unsigned char, int, int);
 
+void special_handler(int, int, int);
+
 void mouse_handler(int, int, int, int);
 
 void motion_handler(int, int);
@@ -56,6 +61,8 @@ void init_floral();
 
 void draw_floral(floral *);
 
+void floral_animate();
+
 void draw_background();
 
 void draw_pointer();
@@ -63,6 +70,9 @@ void draw_pointer();
 // global vars
 Point mouse_pointer = {0, 0};
 floral bk_decorations[FLORAL_COUNT];
+enum Color {
+    PINK, BLUE, YELLOW, GREEN, WHITE
+} bk_color = WHITE;
 
 int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
@@ -78,6 +88,7 @@ int main(int argc, char *argv[]) {
     glutReshapeFunc(reshape_handler);
     glutTimerFunc(0, timer_handler, 0);
     glutKeyboardFunc(keyboard_handler);
+    glutSpecialFunc(special_handler);
     glutMouseFunc(mouse_handler);
     glutMotionFunc(motion_handler);
     glutPassiveMotionFunc(motion_handler);
@@ -105,8 +116,49 @@ void display() {
     glutSwapBuffers();
 }
 
-void keyboard_handler(unsigned char key, int x, int y) {
-    // TODO
+void keyboard_handler(unsigned char key, int, int) {
+    switch (key) {
+        case 'q':
+        case 'Q':
+            exit(0);
+        case 'b':
+        case 'B':
+            if (bk_color != PINK) {
+                bk_color = static_cast<Color>(static_cast<int>(bk_color) - 1);
+            } else {
+                bk_color = WHITE;
+            }
+            break;
+        case 'n':
+        case 'N':
+            if (bk_color != WHITE) {
+                bk_color = static_cast<Color>(static_cast<int>(bk_color) + 1);
+            } else {
+                bk_color = PINK;
+            }
+            break;
+    }
+}
+
+void special_handler(int key, int, int) {
+    switch (key) {
+        case GLUT_KEY_UP:
+        case GLUT_KEY_LEFT:
+            if (bk_color != PINK) {
+                bk_color = static_cast<Color>(static_cast<int>(bk_color) - 1);
+            } else {
+                bk_color = WHITE;
+            }
+            break;
+        case GLUT_KEY_DOWN:
+        case GLUT_KEY_RIGHT:
+            if (bk_color != WHITE) {
+                bk_color = static_cast<Color>(static_cast<int>(bk_color) + 1);
+            } else {
+                bk_color = PINK;
+            }
+            break;
+    }
 }
 
 void mouse_handler(int btn, int state, int x, int y) {
@@ -133,6 +185,7 @@ void reshape_handler(int w, int h) {
 }
 
 void timer_handler(int) {
+    floral_animate();
     glutPostRedisplay();    // redraw content
     glutTimerFunc(1000 / 60, timer_handler, 0);
 }
@@ -140,12 +193,48 @@ void timer_handler(int) {
 void draw_background() {
     use_percentage_cs();
     glBegin(GL_POLYGON);
-    glColor4f(255 / 255.0, 196 / 255.0, 216 / 255.0, 1);
-    glVertex2f(0, 1);
-    glVertex2f(1, 1);
-    glColor4f(255 / 255.0, 220 / 255.0, 231 / 255.0, 1);
-    glVertex2f(1, 0);
-    glVertex2f(0, 0);
+    switch (bk_color) {
+        case PINK:
+            glColor4f(255 / 255.0, 196 / 255.0, 216 / 255.0, 1);
+            glVertex2f(0, 1);
+            glVertex2f(1, 1);
+            glColor4f(255 / 255.0, 220 / 255.0, 231 / 255.0, 1);
+            glVertex2f(1, 0);
+            glVertex2f(0, 0);
+            break;
+        case BLUE:
+            glColor4f(132 / 255.0, 209 / 255.0, 250 / 255.0, 1);
+            glVertex2f(0, 1);
+            glVertex2f(1, 1);
+            glColor4f(201 / 255.0, 243 / 255.0, 255 / 255.0, 1);
+            glVertex2f(1, 0);
+            glVertex2f(0, 0);
+            break;
+        case YELLOW:
+            glColor4f(245 / 255.0, 228 / 255.0, 152 / 255.0, 1);
+            glVertex2f(0, 1);
+            glVertex2f(1, 1);
+            glColor4f(255 / 255.0, 249 / 255.0, 214 / 255.0, 1);
+            glVertex2f(1, 0);
+            glVertex2f(0, 0);
+            break;
+        case GREEN:
+            glColor4f(189 / 255.0, 217 / 255.0, 152 / 255.0, 1);
+            glVertex2f(0, 1);
+            glVertex2f(1, 1);
+            glColor4f(233 / 255.0, 252 / 255.0, 199 / 255.0, 1);
+            glVertex2f(1, 0);
+            glVertex2f(0, 0);
+            break;
+        case WHITE:
+            glColor4f(235 / 255.0, 235 / 255.0, 235 / 255.0, 1);
+            glVertex2f(0, 1);
+            glVertex2f(1, 1);
+            glColor4f(255 / 255.0, 255 / 255.0, 255 / 255.0, 1);
+            glVertex2f(1, 0);
+            glVertex2f(0, 0);
+            break;
+    }
     glEnd();
 
     floral *ptr = bk_decorations;
@@ -169,7 +258,7 @@ void draw_pointer() {
 
 void draw_floral(floral *f) {
     glPushMatrix(); // save previous cs
-    glTranslatef(f->coordinator.x, f->coordinator.y, 0);  // move to new cs
+    glTranslatef(f->position.x, f->position.y, 0);  // move to new cs
     glRotatef(f->rotation, 0, 0, 1); // rotate cs
 
     glColor4f(f->color[0], f->color[1], f->color[2], f->alpha);
@@ -185,11 +274,6 @@ void draw_floral(floral *f) {
             glVertex2f(0, f->size);
             break;
         case floral::CIRCLE:
-//            glEnable(GL_POINT_SMOOTH);
-//            glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-//            glBegin(GL_POINTS);
-//            glPointSize(f->size);
-//            glVertex2f(0, 0);
             glBegin(GL_POLYGON);
             for (float i = 0; i < 2 * PI; i += PI / 360) {
                 glVertex2f(f->size / 2 * cosf(i), f->size / 2 * sinf(i));
@@ -220,8 +304,8 @@ void init_floral() {
     floral *end_ptr = bk_decorations + sizeof(bk_decorations) / sizeof(bk_decorations[0]);
     while (ptr < end_ptr) {
         // random position
-        ptr->coordinator.x = random_int(FLORAL_MARGIN, APP_WIDTH - FLORAL_MARGIN);
-        ptr->coordinator.y = random_int(FLORAL_MARGIN, APP_HEIGHT - FLORAL_MARGIN);
+        ptr->position.x = random_int(FLORAL_MARGIN, APP_WIDTH - FLORAL_MARGIN);
+        ptr->position.y = random_int(FLORAL_MARGIN, APP_HEIGHT - FLORAL_MARGIN);
         // random size
         ptr->size = random_float(FLORAL_SIZE_MIN, FLORAL_SIZE_MAX);
         // random rotation
@@ -230,37 +314,38 @@ void init_floral() {
 //        ptr->color[0] = random_float(0, 1);
 //        ptr->color[1] = random_float(0, 1);
 //        ptr->color[2] = random_float(0, 1);
-        switch (random_int(0,4)) {
+        switch (random_int(0, 4)) {
             case 0:
-                ptr->color[0] = 224 /255.0;
-                ptr->color[1] = 27 /255.0;
-                ptr->color[2] = 57 /255.0;
+                ptr->color[0] = 224 / 255.0;
+                ptr->color[1] = 27 / 255.0;
+                ptr->color[2] = 57 / 255.0;
                 break;
             case 1:
-                ptr->color[0] = 235 /255.0;
-                ptr->color[1] = 100 /255.0;
-                ptr->color[2] = 28 /255.0;
+                ptr->color[0] = 235 / 255.0;
+                ptr->color[1] = 100 / 255.0;
+                ptr->color[2] = 28 / 255.0;
                 break;
             case 2:
-                ptr->color[0] = 227 /255.0;
-                ptr->color[1] = 180 /255.0;
-                ptr->color[2] = 9 /255.0;
+                ptr->color[0] = 227 / 255.0;
+                ptr->color[1] = 180 / 255.0;
+                ptr->color[2] = 9 / 255.0;
                 break;
             case 3:
-                ptr->color[0] = 18 /255.0;
-                ptr->color[1] = 130 /255.0;
-                ptr->color[2] = 46 /255.0;
+                ptr->color[0] = 18 / 255.0;
+                ptr->color[1] = 130 / 255.0;
+                ptr->color[2] = 46 / 255.0;
                 break;
             case 4:
-                ptr->color[0] = 9 /255.0;
-                ptr->color[1] = 52 /255.0;
-                ptr->color[2] = 145 /255.0;
+                ptr->color[0] = 9 / 255.0;
+                ptr->color[1] = 52 / 255.0;
+                ptr->color[2] = 145 / 255.0;
                 break;
         }
         // random alpha
         ptr->alpha = random_float(.2, 1);
         // random Shape
         ptr->shape = static_cast<floral::Shape>(rand() % (floral::SQUARE + 1));
+        ptr->fading = random_bool();
         ptr++;
     }
 }
@@ -281,3 +366,33 @@ float random_float(float min, float max) {
     return distribution(generator);
 }
 
+bool random_bool() {
+    std::random_device device;
+    std::mt19937 generator(device());
+    std::uniform_int_distribution<int> distribution(0, 1);
+    return distribution(generator);
+}
+
+void floral_animate() {
+    floral *ptr = bk_decorations;
+    floral *end_ptr = bk_decorations + sizeof(bk_decorations) / sizeof(bk_decorations[0]);
+    while (ptr < end_ptr) {
+        if (ptr->fading) {
+            ptr->alpha -= FLORAL_ANIMATION_SPEED;
+            if (ptr->alpha < 0) {
+                ptr->alpha = 0;
+                ptr->fading = false;
+                // random position on faded
+                ptr->position.x = random_int(FLORAL_MARGIN, APP_WIDTH - FLORAL_MARGIN);
+                ptr->position.y = random_int(FLORAL_MARGIN, APP_HEIGHT - FLORAL_MARGIN);
+            }
+        } else {
+            ptr->alpha += FLORAL_ANIMATION_SPEED;
+            if (ptr->alpha > 1) {
+                ptr->alpha = 1;
+                ptr->fading = true;
+            }
+        }
+        ptr++;
+    }
+}
