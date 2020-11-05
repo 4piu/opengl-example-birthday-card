@@ -173,11 +173,7 @@ void draw_floral(floral *f) {
     use_absolute_cs();
     switch (f->shape) {
         case floral::SQUARE:
-            glBegin(GL_POLYGON);
-            glVertex2f(-f->size, f->size);
-            glVertex2f(f->size, f->size);
-            glVertex2f(f->size, -f->size);
-            glVertex2f(-f->size, -f->size);
+            glRectf(-f->size / 2, -f->size / 2, f->size / 2, f->size / 2);
             break;
         case floral::TRIANGLE:
             glBegin(GL_TRIANGLES);
@@ -229,7 +225,7 @@ void init_floral() {
         // random alpha
         ptr->alpha = random_float(.2, 1);
         // random Shape
-        ptr->shape = static_cast<floral::Shape>(rand() % floral::SQUARE);
+        ptr->shape = static_cast<floral::Shape>(rand() % (floral::SQUARE + 1));
         ptr++;
     }
 }
