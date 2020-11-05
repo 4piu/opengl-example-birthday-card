@@ -1,6 +1,8 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <cmath>
+#include <random>
+#include <functional>
 
 // macros
 
@@ -233,10 +235,18 @@ void init_floral() {
 }
 
 int random_int(int min, int max) {
-    return rand() % (max - min + 1) + min;
+//    return rand() % (max - min + 1) + min;
+    std::random_device device;
+    std::mt19937 generator(device());
+    std::uniform_int_distribution<int> distribution(min, max);
+    return distribution(generator);
 }
 
 float random_float(float min, float max) {
-    return min + (float) rand() / (float) (RAND_MAX) * max;
+//    return min + (float) rand() / (float) (RAND_MAX) * max;
+    std::random_device device;
+    std::mt19937 generator(device());
+    std::uniform_real_distribution<float> distribution(min, max);
+    return distribution(generator);
 }
 
