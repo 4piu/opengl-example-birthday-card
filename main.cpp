@@ -14,6 +14,7 @@
 #define FLORAL_SIZE_MIN 8
 #define FLORAL_SIZE_MAX 12
 #define FLORAL_ANIMATION_SPEED .008
+#define FLORAL_MOUSE_SENSITIVITY 15
 
 #define EGG_A 150.0
 #define EGG_B 100.0
@@ -75,6 +76,7 @@ void draw_pointer();
 
 // global vars
 Point mouse_pointer = {0, 0};
+Point ref_point = {0, 0};
 floral bk_decorations[FLORAL_COUNT];
 enum Color {
     PINK, BLUE, YELLOW, GREEN, WHITE
@@ -178,6 +180,10 @@ void motion_handler(int x, int y) {
             (float) x / (float) glutGet(GLUT_WINDOW_WIDTH) * APP_WIDTH;
     mouse_pointer.y =
             (float) y / (float) glutGet(GLUT_WINDOW_HEIGHT) * APP_HEIGHT;
+
+    // change center ref point
+    ref_point.x = (float) x / (float) glutGet(GLUT_WINDOW_WIDTH) - .5;
+    ref_point.y = (float) y / (float) glutGet(GLUT_WINDOW_HEIGHT) - .5;
 }
 
 void reshape_handler(int w, int h) {
@@ -265,7 +271,8 @@ void draw_pointer() {
 
 void draw_floral(floral *f) {
     glPushMatrix(); // save previous cs
-    glTranslatef(f->position.x, f->position.y, 0);  // move to new cs
+    glTranslatef(f->position.x - ref_point.x * FLORAL_MOUSE_SENSITIVITY,
+                 f->position.y - ref_point.y * FLORAL_MOUSE_SENSITIVITY, 0);  // move to new cs
     glRotatef(f->rotation, 0, 0, 1); // rotate cs
 
     glColor4f(f->color[0], f->color[1], f->color[2], f->alpha);
@@ -424,7 +431,7 @@ void draw_egg() {
 
     // draw outline
     glColor4f(204 / 255.0, 140 / 255.0, 94 / 255.0, 1);
-    glLineWidth(2); // must call before glBegin
+    glLineWidth(1.5); // must call before glBegin
     glEnable(GL_LINE_SMOOTH);   // smooth
     glBegin(GL_LINE_STRIP);
     for (int y = -EGG_A; y < EGG_A + 1; y++) {
