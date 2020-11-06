@@ -15,6 +15,10 @@
 #define FLORAL_SIZE_MAX 12
 #define FLORAL_ANIMATION_SPEED .008
 
+#define EGG_A 150.0
+#define EGG_B 100.0
+#define EGG_K 0.002
+
 typedef struct {
     GLfloat x, y;
 } Point;
@@ -63,6 +67,8 @@ void draw_floral(floral *);
 
 void floral_animate();
 
+void draw_egg();
+
 void draw_background();
 
 void draw_pointer();
@@ -72,7 +78,7 @@ Point mouse_pointer = {0, 0};
 floral bk_decorations[FLORAL_COUNT];
 enum Color {
     PINK, BLUE, YELLOW, GREEN, WHITE
-} bk_color = WHITE;
+} bk_color = YELLOW;
 
 int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
@@ -111,6 +117,7 @@ void display() {
     glLoadIdentity();
 
     draw_background();
+    draw_egg();
     draw_pointer();
 
     glutSwapBuffers();
@@ -263,6 +270,7 @@ void draw_floral(floral *f) {
 
     glColor4f(f->color[0], f->color[1], f->color[2], f->alpha);
     use_absolute_cs();
+    glEnable(GL_POLYGON_SMOOTH);    // smooth
     switch (f->shape) {
         case floral::SQUARE:
             glRectf(-f->size / 2, -f->size / 2, f->size / 2, f->size / 2);
@@ -281,6 +289,7 @@ void draw_floral(floral *f) {
             break;
     }
     glEnd();
+    glDisable(GL_POLYGON_SMOOTH);
 
     glPopMatrix();  // restore previous cs
 }
@@ -395,4 +404,37 @@ void floral_animate() {
         }
         ptr++;
     }
+}
+
+void draw_egg() {
+    use_absolute_cs();
+    glPushMatrix();
+    glTranslatef(APP_WIDTH / 2.0, APP_HEIGHT / 2.0 + 50, 0);
+
+    // draw egg
+    glColor4f(237 / 255.0, 196 / 255.0, 166 / 255.0, 1);
+    glBegin(GL_POLYGON);
+    for (int y = -EGG_A; y < EGG_A + 1; y++) {
+        glVertex2f(sqrt((1 - y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
+    }
+    for (int y = EGG_A; y > -EGG_A - 1; y--) {
+        glVertex2f(-sqrt((1 - y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
+    }
+    glEnd();
+
+    // draw outline
+    glColor4f(204 / 255.0, 140 / 255.0, 94 / 255.0, 1);
+    glLineWidth(2); // must call before glBegin
+    glEnable(GL_LINE_SMOOTH);   // smooth
+    glBegin(GL_LINE_STRIP);
+    for (int y = -EGG_A; y < EGG_A + 1; y++) {
+        glVertex2f(sqrt((1 - y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
+    }
+    for (int y = EGG_A; y > -EGG_A - 1; y--) {
+        glVertex2f(-sqrt((1 - y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
+    }
+    glEnd();
+    glDisable(GL_LINE_SMOOTH);
+
+    glPopMatrix();
 }
