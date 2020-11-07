@@ -66,15 +66,15 @@ void init_floral();
 
 void draw_floral(floral *);
 
-void floral_animate();
+void animate_floral();
 
 void draw_ellipse(float, float, float, float, float, float[4]);
 
-void draw_egg();
+void display_egg();
 
-void draw_background();
+void display_background();
 
-void draw_pointer();
+void display_pointer();
 
 // global vars
 Point mouse_pointer = {0, 0};
@@ -120,9 +120,9 @@ void display() {
 //    glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
-    draw_background();
-    draw_egg();
-    draw_pointer();
+    display_background();
+    display_egg();
+    display_pointer();
 
     glutSwapBuffers();
 }
@@ -200,12 +200,12 @@ void reshape_handler(int w, int h) {
 }
 
 void timer_handler(int) {
-    floral_animate();
+    animate_floral();
     glutPostRedisplay();    // redraw content
     glutTimerFunc(1000 / 60, timer_handler, 0);
 }
 
-void draw_background() {
+void display_background() {
     use_percentage_cs();
     glBegin(GL_POLYGON);
     switch (bk_color) {
@@ -261,7 +261,7 @@ void draw_background() {
 
 }
 
-void draw_pointer() {
+void display_pointer() {
     // TODO
     use_absolute_cs();
     glColor4f(255 / 255.0, 255 / 255.0, 255 / 255.0, 1);
@@ -391,7 +391,7 @@ bool random_bool() {
     return distribution(generator);
 }
 
-void floral_animate() {
+void animate_floral() {
     floral *ptr = bk_decorations;
     floral *end_ptr = bk_decorations + sizeof(bk_decorations) / sizeof(bk_decorations[0]);
     while (ptr < end_ptr) {
@@ -415,7 +415,7 @@ void floral_animate() {
     }
 }
 
-void draw_egg() {
+void display_egg() {
     use_absolute_cs();
     glPushMatrix();
     glTranslatef(APP_WIDTH / 2.0, APP_HEIGHT / 2.0 + 50, 0);
