@@ -19,6 +19,8 @@
 #define FLORAL_ANIMATION_SPEED .008
 #define FLORAL_MOUSE_SENSITIVITY 15
 
+#define EGG_X APP_WIDTH / 2.0
+#define EGG_Y APP_HEIGHT / 2.0 + 50
 #define EGG_A 150
 #define EGG_B 100
 #define EGG_K 0.002

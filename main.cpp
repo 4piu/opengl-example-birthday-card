@@ -120,6 +120,12 @@ void motion_handler(int x, int y) {
     // change center ref point
     ref_point.x = (float) x / (float) glutGet(GLUT_WINDOW_WIDTH) - .5;
     ref_point.y = (float) y / (float) glutGet(GLUT_WINDOW_HEIGHT) - .5;
+
+    // monitor cursor hover on egg
+    hover_on_egg = x > EGG_X - EGG_B &&
+                   x < EGG_X + EGG_B &&
+                   y > EGG_Y - EGG_A &&
+                   y < EGG_Y + EGG_A;
 }
 
 void reshape_handler(int w, int h) {
@@ -325,8 +331,8 @@ void display_egg() {
 
     // draw shadow
     for (int i = EGG_SHADOW_SIZE; i > 5; i -= 2) {
-        draw_ellipse(360 - ref_point.x * 30,
-                     680,
+        draw_ellipse(EGG_X - ref_point.x * 30,
+                     EGG_Y + 150,
                      0,
                      i,
                      i * .3,
@@ -336,7 +342,7 @@ void display_egg() {
 
     // draw egg
     glPushMatrix();
-    glTranslatef(APP_WIDTH / 2.0, APP_HEIGHT / 2.0 + 50, 0);
+    glTranslatef(EGG_X, EGG_Y, 0);
 
     glColor4f(237 / 255.0, 196 / 255.0, 166 / 255.0, 1);
     glBegin(GL_POLYGON);
@@ -366,8 +372,8 @@ void display_egg() {
 
     // draw highlight
     for (int i = EGG_HIGHLIGHT_SIZE; i > 5; i -= 4) {
-        draw_ellipse(360 + ref_point.x * 80,
-                     470,
+        draw_ellipse(EGG_X + ref_point.x * 80,
+                     EGG_Y - 60,
                      0 - ref_point.x * 40,
                      i * (1 - abs(ref_point.x) * .8),
                      i,
