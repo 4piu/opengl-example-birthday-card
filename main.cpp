@@ -1,80 +1,5 @@
-#include <GL/glew.h>
-#include <GL/glut.h>
-#include <cmath>
-#include <random>
-
-// macros
-#define PI 3.14159265358979323846
-
-#define APP_WIDTH 720
-#define APP_HEIGHT 960
-
-#define FLORAL_COUNT 200
-#define FLORAL_MARGIN -20
-#define FLORAL_SIZE_MIN 8
-#define FLORAL_SIZE_MAX 12
-#define FLORAL_ANIMATION_SPEED .008
-#define FLORAL_MOUSE_SENSITIVITY 15
-
-#define EGG_A 150.0
-#define EGG_B 100.0
-#define EGG_K 0.002
-
-typedef struct {
-    GLfloat x, y;
-} Point;
-
-typedef struct {
-    Point position;
-    float size;
-    float rotation;
-    float color[3];
-    float alpha;
-    enum Shape {
-        TRIANGLE, CIRCLE, SQUARE
-    } shape;
-    bool fading;
-} floral;
-
-// function declarations
-
-int random_int(int, int);
-
-float random_float(float, float);
-
-bool random_bool();
-
-void use_absolute_cs();
-
-void use_percentage_cs();
-
-void display();
-
-void reshape_handler(int, int);
-
-void timer_handler(int);
-
-void keyboard_handler(unsigned char, int, int);
-
-void special_handler(int, int, int);
-
-void mouse_handler(int, int, int, int);
-
-void motion_handler(int, int);
-
-void init_floral();
-
-void draw_floral(floral *);
-
-void animate_floral();
-
-void draw_ellipse(float, float, float, float, float, float[4]);
-
-void display_egg();
-
-void display_background();
-
-void display_pointer();
+#include "main.h"
+#include "utilities.h"
 
 // global vars
 Point mouse_pointer = {0, 0};
@@ -366,29 +291,6 @@ void init_floral() {
         ptr->fading = random_bool();
         ptr++;
     }
-}
-
-int random_int(int min, int max) {
-//    return rand() % (max - min + 1) + min;
-    std::random_device device;
-    std::mt19937 generator(device());
-    std::uniform_int_distribution<int> distribution(min, max);
-    return distribution(generator);
-}
-
-float random_float(float min, float max) {
-//    return min + (float) rand() / (float) (RAND_MAX) * max;
-    std::random_device device;
-    std::mt19937 generator(device());
-    std::uniform_real_distribution<float> distribution(min, max);
-    return distribution(generator);
-}
-
-bool random_bool() {
-    std::random_device device;
-    std::mt19937 generator(device());
-    std::uniform_int_distribution<int> distribution(0, 1);
-    return distribution(generator);
 }
 
 void animate_floral() {
