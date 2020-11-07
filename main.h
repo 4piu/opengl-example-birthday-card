@@ -19,8 +19,8 @@
 #define FLORAL_ANIMATION_SPEED .008
 #define FLORAL_MOUSE_SENSITIVITY 15
 
-#define EGG_A 150.0
-#define EGG_B 100.0
+#define EGG_A 150
+#define EGG_B 100
 #define EGG_K 0.002
 #define EGG_HIGHLIGHT_SIZE 80
 #define EGG_SHADOW_SIZE 120
@@ -65,7 +65,11 @@ void draw_floral(floral *);
 
 void animate_floral();
 
-void draw_ellipse(float, float, float, float, float, float[4]);
+void draw_ellipse(float, float, float, int, int, float[4]);
+
+void display_egg_crack();
+
+void display_chick();
 
 void display_egg();
 

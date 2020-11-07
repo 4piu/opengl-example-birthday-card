@@ -8,6 +8,7 @@ floral bk_decorations[FLORAL_COUNT];
 enum Color {
     PINK, BLUE, YELLOW, GREEN, WHITE
 } bk_color = YELLOW;
+enum EggStatus {A, B, C, D, E} egg_status = A;
 
 int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
@@ -46,7 +47,11 @@ void display() {
     use_absolute_cs();
 
     display_background();
-    display_egg();
+    if (egg_status == E) {
+        display_chick();
+    } else {
+        display_egg();
+    }
     display_pointer();
 
     glutSwapBuffers();
@@ -308,6 +313,12 @@ void animate_floral() {
 }
 
 void display_egg() {
+    // display egg crack
+    if (egg_status != A) {
+        display_egg_crack();
+        return;
+    }
+
     // draw shadow
     for (int i = EGG_SHADOW_SIZE; i > 5; i -= 2) {
         draw_ellipse(360 - ref_point.x * 30,
@@ -325,11 +336,11 @@ void display_egg() {
 
     glColor4f(237 / 255.0, 196 / 255.0, 166 / 255.0, 1);
     glBegin(GL_POLYGON);
-    for (float y = -EGG_A; y < EGG_A + 1; y++) {
-        glVertex2f(sqrt((1 - y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
+    for (int y = -EGG_A; y < EGG_A + 1; y++) {
+        glVertex2f(sqrt((1 - (double) y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
     }
-    for (float y = EGG_A; y > -EGG_A - 1; y--) {
-        glVertex2f(-sqrt((1 - y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
+    for (int y = EGG_A; y > -EGG_A - 1; y--) {
+        glVertex2f(-sqrt((1 - (double) y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
     }
     glEnd();
 
@@ -339,10 +350,10 @@ void display_egg() {
     glEnable(GL_LINE_SMOOTH);   // smooth
     glBegin(GL_LINE_STRIP);
     for (int y = -EGG_A; y < EGG_A + 1; y++) {
-        glVertex2f(sqrt((1 - y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
+        glVertex2f(sqrt((1 - (double) y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
     }
     for (int y = EGG_A; y > -EGG_A - 1; y--) {
-        glVertex2f(-sqrt((1 - y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
+        glVertex2f(-sqrt((1 - (double) y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
     }
     glEnd();
     glDisable(GL_LINE_SMOOTH);
@@ -359,11 +370,9 @@ void display_egg() {
                      new float[4]{.95, .95, .95, 0.04});
     }
     glEnd();
-
-
 }
 
-void draw_ellipse(float x, float y, float r, float a, float b, float *color) {
+void draw_ellipse(float x, float y, float r, int a, int b, float *color) {
     glPushMatrix();
     glTranslatef(x, y, 0);
     glRotatef(r, 0, 0, 1);
@@ -372,12 +381,27 @@ void draw_ellipse(float x, float y, float r, float a, float b, float *color) {
 
     glBegin(GL_POLYGON);
     for (int _x = -a; _x < a; _x++) {
-        glVertex2f(_x, sqrt((1 - _x * _x / a / a) * b * b));
+        glVertex2f(_x, sqrt((1 - (double) _x * _x / a / a) * b * b));
     }
     for (int _x = a; _x > -a; _x--) {
-        glVertex2f(_x, -sqrt((1 - _x * _x / a / a) * b * b));
+        glVertex2f(_x, -sqrt((1 - (double) _x * _x / a / a) * b * b));
     }
     glEnd();
 
     glPopMatrix();
+}
+
+void display_egg_crack() {
+    switch (egg_status) {
+        case B:
+            break;
+        case C:
+            break;
+        case D:
+            break;
+    }
+}
+
+void display_chick() {
+
 }
