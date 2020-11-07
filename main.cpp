@@ -349,10 +349,10 @@ void draw_ellipse(float x, float y, float r, float a, float b, float *color) {
     glColor4f(color[0], color[1], color[2], color[3]);
 
     glBegin(GL_POLYGON);
-    for (float _x = -a; _x < a + 1; _x++) {
+    for (int _x = -a; _x < a; _x++) {
         glVertex2f(_x, sqrt((1 - _x * _x / a / a) * b * b));
     }
-    for (float _x = a; _x > -a - 1; _x--) {
+    for (int _x = a; _x > -a; _x--) {
         glVertex2f(_x, -sqrt((1 - _x * _x / a / a) * b * b));
     }
     glEnd();
