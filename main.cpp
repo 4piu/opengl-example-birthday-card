@@ -62,6 +62,10 @@ void keyboard_handler(unsigned char key, int, int) {
         case 'q':
         case 'Q':
             exit(0);
+        case 'r':
+        case 'R':
+            reset_status();
+            break;
         case 'b':
         case 'B':
             if (bk_color != PINK) {
@@ -404,4 +408,8 @@ void display_egg_crack() {
 
 void display_chick() {
 
+}
+
+void reset_status() {
+    egg_status = A;
 }

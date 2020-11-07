@@ -77,4 +77,6 @@ void display_background();
 
 void display_pointer();
 
+void reset_status();
+
 #endif //BIRTHDAY_CARD_MAIN_H
