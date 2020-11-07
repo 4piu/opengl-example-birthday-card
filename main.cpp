@@ -10,7 +10,7 @@
 #define APP_HEIGHT 960
 
 #define FLORAL_COUNT 200
-#define FLORAL_MARGIN 20
+#define FLORAL_MARGIN -20
 #define FLORAL_SIZE_MIN 8
 #define FLORAL_SIZE_MAX 12
 #define FLORAL_ANIMATION_SPEED .008
@@ -67,6 +67,8 @@ void init_floral();
 void draw_floral(floral *);
 
 void floral_animate();
+
+void draw_ellipse(float, float, float, float, float, float[4]);
 
 void draw_egg();
 
@@ -421,10 +423,10 @@ void draw_egg() {
     // draw egg
     glColor4f(237 / 255.0, 196 / 255.0, 166 / 255.0, 1);
     glBegin(GL_POLYGON);
-    for (int y = -EGG_A; y < EGG_A + 1; y++) {
+    for (float y = -EGG_A; y < EGG_A + 1; y++) {
         glVertex2f(sqrt((1 - y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
     }
-    for (int y = EGG_A; y > -EGG_A - 1; y--) {
+    for (float y = EGG_A; y > -EGG_A - 1; y--) {
         glVertex2f(-sqrt((1 - y * y / EGG_A / EGG_A) * EGG_B * EGG_B / (1 - EGG_K * y)), y);
     }
     glEnd();
@@ -442,6 +444,26 @@ void draw_egg() {
     }
     glEnd();
     glDisable(GL_LINE_SMOOTH);
+
+    glPopMatrix();
+}
+
+void draw_ellipse(float x, float y, float r, float a, float b, float *color) {
+    use_absolute_cs();
+    glPushMatrix();
+    glTranslatef(x, y, 0);
+    glRotatef(r, 0, 0, 1);
+
+    glColor4f(color[0], color[1], color[2], color[3]);
+
+    glBegin(GL_POLYGON);
+    for (float _x = -a; _x < a + 1; _x++) {
+        glVertex2f(_x, sqrt((1 - _x * _x / a / a) * b * b));
+    }
+    for (float _x = a; _x > -a - 1; _x--) {
+        glVertex2f(_x, -sqrt((1 - _x * _x / a / a) * b * b));
+    }
+    glEnd();
 
     glPopMatrix();
 }
