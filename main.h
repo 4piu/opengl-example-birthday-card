@@ -22,7 +22,8 @@
 #define EGG_A 150.0
 #define EGG_B 100.0
 #define EGG_K 0.002
-#define EGG_HIGHLIGHT_SIZE 50
+#define EGG_HIGHLIGHT_SIZE 80
+#define EGG_SHADOW_SIZE 120
 
 typedef struct {
     GLfloat x, y;

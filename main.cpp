@@ -308,11 +308,21 @@ void animate_floral() {
 }
 
 void display_egg() {
-    use_absolute_cs();
+    // draw shadow
+    for (int i = EGG_SHADOW_SIZE; i > 5; i -= 2) {
+        draw_ellipse(360 - ref_point.x * 30,
+                     680,
+                     0,
+                     i,
+                     i * .3,
+                     new float[4]{.2, .2, .2, 0.02});
+    }
+    glEnd();
+
+    // draw egg
     glPushMatrix();
     glTranslatef(APP_WIDTH / 2.0, APP_HEIGHT / 2.0 + 50, 0);
 
-    // draw egg
     glColor4f(237 / 255.0, 196 / 255.0, 166 / 255.0, 1);
     glBegin(GL_POLYGON);
     for (float y = -EGG_A; y < EGG_A + 1; y++) {
@@ -324,7 +334,7 @@ void display_egg() {
     glEnd();
 
     // draw outline
-    glColor4f(204 / 255.0, 140 / 255.0, 94 / 255.0, 1);
+    glColor4f(224 / 255.0, 180 / 255.0, 155 / 255.0, 1);
     glLineWidth(1.5); // must call before glBegin
     glEnable(GL_LINE_SMOOTH);   // smooth
     glBegin(GL_LINE_STRIP);
@@ -338,10 +348,22 @@ void display_egg() {
     glDisable(GL_LINE_SMOOTH);
 
     glPopMatrix();
+
+    // draw highlight
+    for (int i = EGG_HIGHLIGHT_SIZE; i > 5; i -= 4) {
+        draw_ellipse(360 + ref_point.x * 80,
+                     470,
+                     0 - ref_point.x * 40,
+                     i * (1 - abs(ref_point.x) * .8),
+                     i,
+                     new float[4]{.95, .95, .95, 0.04});
+    }
+    glEnd();
+
+
 }
 
 void draw_ellipse(float x, float y, float r, float a, float b, float *color) {
-    use_absolute_cs();
     glPushMatrix();
     glTranslatef(x, y, 0);
     glRotatef(r, 0, 0, 1);
