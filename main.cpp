@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 
 void display() {
 //    glClear(GL_COLOR_BUFFER_BIT);
-    glLoadIdentity();
+    use_absolute_cs();
 
     display_background();
     display_egg();
@@ -131,48 +131,47 @@ void timer_handler(int) {
 }
 
 void display_background() {
-    use_percentage_cs();
     glBegin(GL_POLYGON);
     switch (bk_color) {
         case PINK:
             glColor4f(255 / 255.0, 196 / 255.0, 216 / 255.0, 1);
-            glVertex2f(0, 1);
-            glVertex2f(1, 1);
-            glColor4f(255 / 255.0, 220 / 255.0, 231 / 255.0, 1);
-            glVertex2f(1, 0);
             glVertex2f(0, 0);
+            glVertex2f(APP_WIDTH, 0);
+            glColor4f(255 / 255.0, 220 / 255.0, 231 / 255.0, 1);
+            glVertex2f(APP_WIDTH, APP_HEIGHT);
+            glVertex2f(0, APP_HEIGHT);
             break;
         case BLUE:
             glColor4f(132 / 255.0, 209 / 255.0, 250 / 255.0, 1);
-            glVertex2f(0, 1);
-            glVertex2f(1, 1);
-            glColor4f(201 / 255.0, 243 / 255.0, 255 / 255.0, 1);
-            glVertex2f(1, 0);
             glVertex2f(0, 0);
+            glVertex2f(APP_WIDTH, 0);
+            glColor4f(201 / 255.0, 243 / 255.0, 255 / 255.0, 1);
+            glVertex2f(APP_WIDTH, APP_HEIGHT);
+            glVertex2f(0, APP_HEIGHT);
             break;
         case YELLOW:
             glColor4f(245 / 255.0, 228 / 255.0, 152 / 255.0, 1);
-            glVertex2f(0, 1);
-            glVertex2f(1, 1);
-            glColor4f(255 / 255.0, 249 / 255.0, 214 / 255.0, 1);
-            glVertex2f(1, 0);
             glVertex2f(0, 0);
+            glVertex2f(APP_WIDTH, 0);
+            glColor4f(255 / 255.0, 249 / 255.0, 214 / 255.0, 1);
+            glVertex2f(APP_WIDTH, APP_HEIGHT);
+            glVertex2f(0, APP_HEIGHT);
             break;
         case GREEN:
             glColor4f(189 / 255.0, 217 / 255.0, 152 / 255.0, 1);
-            glVertex2f(0, 1);
-            glVertex2f(1, 1);
-            glColor4f(233 / 255.0, 252 / 255.0, 199 / 255.0, 1);
-            glVertex2f(1, 0);
             glVertex2f(0, 0);
+            glVertex2f(APP_WIDTH, 0);
+            glColor4f(233 / 255.0, 252 / 255.0, 199 / 255.0, 1);
+            glVertex2f(APP_WIDTH, APP_HEIGHT);
+            glVertex2f(0, APP_HEIGHT);
             break;
         case WHITE:
             glColor4f(235 / 255.0, 235 / 255.0, 235 / 255.0, 1);
-            glVertex2f(0, 1);
-            glVertex2f(1, 1);
-            glColor4f(255 / 255.0, 255 / 255.0, 255 / 255.0, 1);
-            glVertex2f(1, 0);
             glVertex2f(0, 0);
+            glVertex2f(APP_WIDTH, 0);
+            glColor4f(255 / 255.0, 255 / 255.0, 255 / 255.0, 1);
+            glVertex2f(APP_WIDTH, APP_HEIGHT);
+            glVertex2f(0, APP_HEIGHT);
             break;
     }
     glEnd();
@@ -188,7 +187,6 @@ void display_background() {
 
 void display_pointer() {
     // TODO
-    use_absolute_cs();
     glColor4f(255 / 255.0, 255 / 255.0, 255 / 255.0, 1);
     glPointSize(10);
     glBegin(GL_POINTS);
@@ -203,7 +201,6 @@ void draw_floral(floral *f) {
     glRotatef(f->rotation, 0, 0, 1); // rotate cs
 
     glColor4f(f->color[0], f->color[1], f->color[2], f->alpha);
-    use_absolute_cs();
     glEnable(GL_POLYGON_SMOOTH);    // smooth
     switch (f->shape) {
         case floral::SQUARE:
@@ -232,13 +229,6 @@ void use_absolute_cs() {
     glMatrixMode(GL_PROJECTION); // change matrix mode
     glLoadIdentity();   // reset projection matrix
     gluOrtho2D(0, APP_WIDTH, APP_HEIGHT, 0); // use custom coordination system
-    glMatrixMode(GL_MODELVIEW);
-}
-
-void use_percentage_cs() {
-    glMatrixMode(GL_PROJECTION); // change matrix mode
-    glLoadIdentity();   // reset projection matrix
-    gluOrtho2D(0, 1, 1, 0); // use custom coordination system
     glMatrixMode(GL_MODELVIEW);
 }
 

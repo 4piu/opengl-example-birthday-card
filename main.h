@@ -44,8 +44,6 @@ typedef struct {
 
 void use_absolute_cs();
 
-void use_percentage_cs();
-
 void display();
 
 void reshape_handler(int, int);
