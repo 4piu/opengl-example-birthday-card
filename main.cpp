@@ -459,7 +459,6 @@ void display_chick() {
 
     // draw body
     // must arrange the point wisely or the triangles may overlap
-    glEnable(GL_POLYGON_SMOOTH);
     glBegin(GL_POLYGON);
 
     glVertex2f(360, 420); // first point in the middle of the polygon
@@ -516,9 +515,29 @@ void display_chick() {
     glVertex2f(264, 496);
 
     glEnd();
-    glDisable(GL_POLYGON_SMOOTH);
 
-    // draw hair
+    // draw ahoge
+    glBegin(GL_POLYGON);
+    glVertex2f(361, 340);
+    glVertex2f(357, 347);
+    glVertex2f(356, 352);
+    glVertex2f(355, 359);
+    glVertex2f(355, 363);
+    glVertex2f(356, 369);
+    glVertex2f(358, 372);
+    glVertex2f(360, 364);
+    glVertex2f(362, 357);
+    glVertex2f(365, 350);
+    glVertex2f(368, 345);
+    glVertex2f(374, 340);
+    glVertex2f(380, 336);
+    glVertex2f(387, 332);
+    glVertex2f(394, 330);
+    glVertex2f(387, 328);
+    glVertex2f(380, 329);
+    glVertex2f(373, 331);
+    glVertex2f(367, 335);
+    glEnd();
 
     // draw feet
 }
