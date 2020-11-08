@@ -198,43 +198,43 @@ void display_background() {
     switch (bk_color) {
         case PINK:
             glColor4f(255 / 255.0, 196 / 255.0, 216 / 255.0, 1);
-            glVertex2f(0, 0);
-            glVertex2f(APP_WIDTH, 0);
-            glColor4f(255 / 255.0, 220 / 255.0, 231 / 255.0, 1);
             glVertex2f(APP_WIDTH, APP_HEIGHT);
             glVertex2f(0, APP_HEIGHT);
+            glColor4f(255 / 255.0, 220 / 255.0, 231 / 255.0, 1);
+            glVertex2f(0, 0);
+            glVertex2f(APP_WIDTH, 0);
             break;
         case BLUE:
             glColor4f(132 / 255.0, 209 / 255.0, 250 / 255.0, 1);
-            glVertex2f(0, 0);
-            glVertex2f(APP_WIDTH, 0);
-            glColor4f(201 / 255.0, 243 / 255.0, 255 / 255.0, 1);
             glVertex2f(APP_WIDTH, APP_HEIGHT);
             glVertex2f(0, APP_HEIGHT);
+            glColor4f(201 / 255.0, 243 / 255.0, 255 / 255.0, 1);
+            glVertex2f(0, 0);
+            glVertex2f(APP_WIDTH, 0);
             break;
         case YELLOW:
             glColor4f(245 / 255.0, 228 / 255.0, 152 / 255.0, 1);
-            glVertex2f(0, 0);
-            glVertex2f(APP_WIDTH, 0);
-            glColor4f(255 / 255.0, 249 / 255.0, 214 / 255.0, 1);
             glVertex2f(APP_WIDTH, APP_HEIGHT);
             glVertex2f(0, APP_HEIGHT);
+            glColor4f(255 / 255.0, 249 / 255.0, 214 / 255.0, 1);
+            glVertex2f(0, 0);
+            glVertex2f(APP_WIDTH, 0);
             break;
         case GREEN:
             glColor4f(189 / 255.0, 217 / 255.0, 152 / 255.0, 1);
-            glVertex2f(0, 0);
-            glVertex2f(APP_WIDTH, 0);
-            glColor4f(233 / 255.0, 252 / 255.0, 199 / 255.0, 1);
             glVertex2f(APP_WIDTH, APP_HEIGHT);
             glVertex2f(0, APP_HEIGHT);
+            glColor4f(233 / 255.0, 252 / 255.0, 199 / 255.0, 1);
+            glVertex2f(0, 0);
+            glVertex2f(APP_WIDTH, 0);
             break;
         case WHITE:
             glColor4f(235 / 255.0, 235 / 255.0, 235 / 255.0, 1);
-            glVertex2f(0, 0);
-            glVertex2f(APP_WIDTH, 0);
-            glColor4f(255 / 255.0, 255 / 255.0, 255 / 255.0, 1);
             glVertex2f(APP_WIDTH, APP_HEIGHT);
             glVertex2f(0, APP_HEIGHT);
+            glColor4f(255 / 255.0, 255 / 255.0, 255 / 255.0, 1);
+            glVertex2f(0, 0);
+            glVertex2f(APP_WIDTH, 0);
             break;
     }
     glEnd();
@@ -1021,7 +1021,7 @@ void draw_balloon(Balloon b) {
                  26,
                  BALLOON_WIDTH * .1,
                  BALLOON_HEIGHT * .15,
-                 new float[4]{1, 1, 1, .5});
+                 new float[4]{1, 1, 1, .4});
     // bottom
     glColor4f(b.color[0], b.color[1], b.color[2], BALLOON_ALPHA);
     glBegin(GL_TRIANGLES);
