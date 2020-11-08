@@ -52,10 +52,9 @@ void display() {
     use_absolute_cs();
 
     display_background();
+    display_egg();
     if (egg_status == E) {
         display_chick();
-    } else {
-        display_egg();
     }
     display_pointer();
 
@@ -455,7 +454,63 @@ void display_egg_crack() {
 }
 
 void display_chick() {
+    glColor4f(235 / 255.0, 209 / 255.0, 101 / 255.0, 1);
 
+    // draw body
+    glEnable(GL_POLYGON_SMOOTH);
+    glBegin(GL_POLYGON);
+    glVertex2f(264, 496);
+    glVertex2f(278, 507);
+    glVertex2f(311, 505);
+    glVertex2f(330, 529);
+    glVertex2f(361, 521);
+    glVertex2f(395, 535);
+    glVertex2f(422, 510);
+    glVertex2f(442, 517);
+    glVertex2f(457, 499);
+    
+    glVertex2f(459, 493);
+    glVertex2f(460, 483);
+    glVertex2f(459, 472);
+    glVertex2f(456, 453);
+    glVertex2f(454, 443);
+    glVertex2f(450, 433);
+    glVertex2f(446, 424);
+    glVertex2f(441, 414);
+    glVertex2f(434, 405);
+    glVertex2f(427, 398);
+    glVertex2f(418, 389);
+    glVertex2f(408, 383);
+    glVertex2f(396, 377);
+    glVertex2f(386, 374);
+    glVertex2f(375, 371);
+    glVertex2f(365, 370);
+    glVertex2f(353, 370);
+    glVertex2f(342, 372);
+    glVertex2f(333, 374);
+    glVertex2f(322, 378);
+    glVertex2f(310, 384);
+    glVertex2f(302, 390);
+    glVertex2f(294, 397);
+    glVertex2f(287, 406);
+    glVertex2f(282, 413);
+    glVertex2f(277, 421);
+    glVertex2f(273, 429);
+    glVertex2f(270, 437);
+    glVertex2f(268, 443);
+    glVertex2f(266, 451);
+    glVertex2f(265, 458);
+    glVertex2f(264, 466);
+    glVertex2f(263, 473);
+    glVertex2f(263, 483);
+    glVertex2f(263, 489);
+
+    glEnd();
+    glDisable(GL_POLYGON_SMOOTH);
+
+    // draw hair
+
+    // draw feet
 }
 
 void reset_status() {
