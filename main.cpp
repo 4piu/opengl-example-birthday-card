@@ -458,8 +458,13 @@ void display_chick() {
     glColor4f(235 / 255.0, 209 / 255.0, 101 / 255.0, 1);
 
     // draw body
+    // must arrange the point wisely or the triangles may overlap
     glEnable(GL_POLYGON_SMOOTH);
     glBegin(GL_POLYGON);
+
+    glVertex2f(360, 420); // first point in the middle of the polygon
+
+    // crack at the bottom of the polygon
     glVertex2f(264, 496);
     glVertex2f(278, 507);
     glVertex2f(311, 505);
@@ -469,7 +474,8 @@ void display_chick() {
     glVertex2f(422, 510);
     glVertex2f(442, 517);
     glVertex2f(457, 499);
-    
+
+    // curvy dome of the polygon
     glVertex2f(459, 493);
     glVertex2f(460, 483);
     glVertex2f(459, 472);
@@ -505,6 +511,9 @@ void display_chick() {
     glVertex2f(263, 473);
     glVertex2f(263, 483);
     glVertex2f(263, 489);
+
+    // manually close the outline
+    glVertex2f(264, 496);
 
     glEnd();
     glDisable(GL_POLYGON_SMOOTH);
