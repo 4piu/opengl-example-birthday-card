@@ -54,9 +54,6 @@ void display() {
 
     display_background();
     display_egg();
-    if (egg_status == E) {
-        display_chick();
-    }
     display_pointer();
 
     glutSwapBuffers();
@@ -377,20 +374,25 @@ void display_egg() {
 
     glPopMatrix();
 
-    // draw highlight
-    for (int i = EGG_HIGHLIGHT_SIZE; i > 5; i -= 4) {
-        draw_ellipse(EGG_X + ref_point.x * 80,
-                     EGG_Y - 60,
-                     0 - ref_point.x * 40,
-                     i * (1 - abs(ref_point.x) * .9),
-                     i,
-                     new float[4]{.95, .95, .95, 0.04});
-    }
-    glEnd();
-
     // display egg crack
     if (egg_status != A) {
         display_egg_crack();
+    }
+
+    if (egg_status == E) {
+        display_chick();
+    }
+
+    // draw highlight
+    if (egg_status != E) {
+        for (int i = EGG_HIGHLIGHT_SIZE; i > 5; i -= 4) {
+            draw_ellipse(EGG_X + ref_point.x * 80,
+                         EGG_Y - 60,
+                         0 - ref_point.x * 40,
+                         i * (1 - abs(ref_point.x) * .9),
+                         i,
+                         new float[4]{.95, .95, .95, 0.04});
+        }
     }
 }
 
@@ -541,9 +543,9 @@ void display_chick() {
 
     // draw feet
     draw_ellipse(312, 623, -20, 10, 16,
-                 new float[4] {235 / 255.0, 209 / 255.0, 101 / 255.0, 1});
+                 new float[4]{235 / 255.0, 209 / 255.0, 101 / 255.0, 1});
     draw_ellipse(412, 628, 20, 10, 16,
-                 new float[4] {235 / 255.0, 209 / 255.0, 101 / 255.0, 1});
+                 new float[4]{235 / 255.0, 209 / 255.0, 101 / 255.0, 1});
 
     glColor4f(74 / 255.0, 51 / 255.0, 33 / 255.0, 1);   // brown
     glEnable(GL_LINE_SMOOTH);
@@ -571,6 +573,81 @@ void display_chick() {
     glEnd();
 
     glDisable(GL_LINE_SMOOTH);
+
+    // draw face
+
+    // draw eyes
+    glEnable(GL_POLYGON_SMOOTH);
+    draw_ellipse(326 + ref_point.x * CHICK_ANIMATION_SENSITIVITY,
+                 423 + ref_point.y * CHICK_ANIMATION_SENSITIVITY,
+                 10 - ref_point.x * 10,
+                 5, 8, new float[4]{0, 0, 0, 1});
+    draw_ellipse(385 + ref_point.x * CHICK_ANIMATION_SENSITIVITY,
+                 423 + ref_point.y * CHICK_ANIMATION_SENSITIVITY,
+                 10 - ref_point.x * 10,
+                 5, 8, new float[4]{0, 0, 0, 1});
+    glDisable(GL_POLYGON_SMOOTH);
+
+    // draw beak
+    glPushMatrix();
+    glTranslatef(ref_point.x * CHICK_ANIMATION_SENSITIVITY, ref_point.y * CHICK_ANIMATION_SENSITIVITY, 0);
+
+    glEnable(GL_LINE_SMOOTH);
+    glColor4f(0, 0, 0, 1);
+    glLineWidth(2.5);
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(354, 448);
+    glVertex2f(346, 455);
+    glVertex2f(355, 461);
+    glVertex2f(354, 454);
+    glEnd();
+    glDisable(GL_LINE_SMOOTH);
+
+    glPopMatrix();
+
+    // draw little wings
+
+    glColor4f(0, 0, 0, 1);
+    glLineWidth(2.5);
+    glEnable(GL_LINE_SMOOTH);
+    // left
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(278, 494);
+    glVertex2f(276, 487);
+    glVertex2f(275, 480);
+    glVertex2f(275, 473);
+    glVertex2f(276, 469);
+    glVertex2f(280, 467);
+    glVertex2f(285, 471);
+    glVertex2f(290, 477);
+    glVertex2f(295, 485);
+    glVertex2f(301, 493);
+    glEnd();
+    // right
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(420, 494);
+    glVertex2f(428, 485);
+    glVertex2f(437, 479);
+    glVertex2f(445, 476);
+    glVertex2f(446, 487);
+    glVertex2f(445, 495);
+    glVertex2f(444, 503);
+    glEnd();
+    glDisable(GL_LINE_SMOOTH);
+
+    // draw cheek
+    for (int size = 14; size > 4; size -= 2) {
+        draw_ellipse(297 + ref_point.x * CHICK_ANIMATION_SENSITIVITY,
+                     444 + ref_point.y * CHICK_ANIMATION_SENSITIVITY,
+                     0, size, size * .5,
+                     new float[4] {240 / 255.0, 68 / 255.0, 115 / 255.0, 0.05});
+    }
+    for (int size = 14; size > 4; size -= 2) {
+        draw_ellipse(410 + ref_point.x * CHICK_ANIMATION_SENSITIVITY,
+                     444 + ref_point.y * CHICK_ANIMATION_SENSITIVITY,
+                     0, size, size * .5,
+                     new float[4] {240 / 255.0, 68 / 255.0, 115 / 255.0, 0.05});
+    }
 }
 
 void reset_status() {

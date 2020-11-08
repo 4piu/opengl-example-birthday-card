@@ -27,6 +27,8 @@
 #define EGG_HIGHLIGHT_SIZE 80
 #define EGG_SHADOW_SIZE 120
 
+#define CHICK_ANIMATION_SENSITIVITY 10
+
 // type def
 
 typedef struct {
