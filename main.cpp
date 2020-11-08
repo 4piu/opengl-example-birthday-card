@@ -574,7 +574,9 @@ void display_chick() {
 
     glColor4f(74 / 255.0, 51 / 255.0, 33 / 255.0, 1);   // brown
     glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_POINT_SMOOTH);
     glLineWidth(6 * scale_factor);
+    glPointSize(6 * scale_factor);
 
     // left foot
     glBegin(GL_LINE_STRIP);
@@ -584,6 +586,11 @@ void display_chick() {
     glEnd();
     glBegin(GL_LINE_STRIP);
     glVertex2f(310, 623);
+    glVertex2f(315, 609);
+    glEnd();
+    glBegin(GL_POINTS);
+    glVertex2f(319, 640);
+    glVertex2f(297, 615);
     glVertex2f(315, 609);
     glEnd();
     // right foot
@@ -596,8 +603,14 @@ void display_chick() {
     glVertex2f(420, 629);
     glVertex2f(419, 613);
     glEnd();
+    glBegin(GL_POINTS);
+    glVertex2f(419, 613);
+    glVertex2f(412, 646);
+    glVertex2f(436, 620);
+    glEnd();
 
     glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_POINT_SMOOTH);
 
     // draw face
 
