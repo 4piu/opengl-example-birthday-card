@@ -107,7 +107,12 @@ void special_handler(int key, int, int) {
 }
 
 void mouse_handler(int btn, int state, int x, int y) {
-    // TODO
+    // egg click event
+    if (btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN && hover_on_egg) {
+        if (egg_status != E) {
+            egg_status = static_cast<EggStatus>(static_cast<int>(egg_status) + 1);
+        }
+    }
 }
 
 void motion_handler(int x, int y) {
@@ -323,12 +328,6 @@ void animate_floral() {
 }
 
 void display_egg() {
-    // display egg crack
-    if (egg_status != A) {
-        display_egg_crack();
-        return;
-    }
-
     // draw shadow
     for (int i = EGG_SHADOW_SIZE; i > 5; i -= 2) {
         draw_ellipse(EGG_X - ref_point.x * 30,
@@ -380,6 +379,11 @@ void display_egg() {
                      new float[4]{.95, .95, .95, 0.04});
     }
     glEnd();
+
+    // display egg crack
+    if (egg_status != A) {
+        display_egg_crack();
+    }
 }
 
 void draw_ellipse(float x, float y, float r, int a, int b, float *color) {
@@ -402,14 +406,44 @@ void draw_ellipse(float x, float y, float r, int a, int b, float *color) {
 }
 
 void display_egg_crack() {
+    glColor4f(28 / 255.0, 20 / 255.0, 12 / 255.0, 1);
+    glEnable(GL_LINE_SMOOTH);
     switch (egg_status) {
-        case B:
-            break;
-        case C:
-            break;
+        case E:
         case D:
-            break;
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(395, 536);
+            glVertex2f(422, 511);
+            glVertex2f(453, 522);
+            glEnd();
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(442, 518);
+            glVertex2f(456, 501);
+            glEnd();
+        case C:
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(311, 506);
+            glVertex2f(330, 531);
+            glVertex2f(362, 523);
+            glVertex2f(395, 536);
+            glEnd();
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(362, 523);
+            glVertex2f(373, 510);
+            glEnd();
+        case B:
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(265, 498);
+            glVertex2f(279, 508);
+            glVertex2f(311, 506);
+            glEnd();
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(290, 508);
+            glVertex2f(295, 523);
+            glEnd();
+        default:;
     }
+    glDisable(GL_LINE_SMOOTH);
 }
 
 void display_chick() {
