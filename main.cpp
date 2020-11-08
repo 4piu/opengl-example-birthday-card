@@ -13,6 +13,7 @@ enum EggStatus {
 } egg_status = A;
 bool hover_on_egg = false;
 float beam_rotation = 0;
+float scale_factor = 1;
 
 // implementations
 
@@ -137,10 +138,10 @@ void motion_handler(int x, int y) {
     ref_point.y = (float) y / (float) glutGet(GLUT_WINDOW_HEIGHT) - .5;
 
     // monitor cursor hover on egg
-    hover_on_egg = x > EGG_X - EGG_B &&
-                   x < EGG_X + EGG_B &&
-                   y > EGG_Y - EGG_A &&
-                   y < EGG_Y + EGG_A;
+    hover_on_egg = x > (EGG_X - EGG_B) * scale_factor &&
+                   x < (EGG_X + EGG_B) * scale_factor &&
+                   y > (EGG_Y - EGG_A) * scale_factor &&
+                   y < (EGG_Y + EGG_A) * scale_factor;
 }
 
 void reshape_handler(int w, int h) {
@@ -151,6 +152,7 @@ void reshape_handler(int w, int h) {
         new_h = (int) ((float) w / (float) APP_WIDTH * (float) APP_HEIGHT);
     }
     glViewport((w - new_w) / 2, (h - new_h) / 2, new_w, new_h); // set viewport
+    scale_factor = (float) new_w / APP_WIDTH;
     glutReshapeWindow(new_w, new_h);    // force Shape window to specified ratio
 }
 
@@ -222,7 +224,7 @@ void display_pointer() {
     } else {
         glColor4f(255 / 255.0, 255 / 255.0, 255 / 255.0, 1);
     }
-    glPointSize(10);
+    glPointSize(10 * scale_factor);
     glBegin(GL_POINTS);
     glVertex2f(mouse_pointer.x, mouse_pointer.y);
     glEnd();
@@ -366,7 +368,7 @@ void display_egg() {
 
     // draw outline
     glColor4f(224 / 255.0, 180 / 255.0, 155 / 255.0, 1);
-    glLineWidth(1.5); // must call before glBegin
+    glLineWidth(1.5 * scale_factor); // must call before glBegin
     glEnable(GL_LINE_SMOOTH);   // smooth
     glBegin(GL_LINE_STRIP);
     for (int y = -EGG_A; y < EGG_A + 1; y++) {
@@ -551,7 +553,7 @@ void display_chick() {
 
     glColor4f(74 / 255.0, 51 / 255.0, 33 / 255.0, 1);   // brown
     glEnable(GL_LINE_SMOOTH);
-    glLineWidth(6);
+    glLineWidth(6 * scale_factor);
 
     // left foot
     glBegin(GL_LINE_STRIP);
@@ -596,7 +598,7 @@ void display_chick() {
 
     glEnable(GL_LINE_SMOOTH);
     glColor4f(0, 0, 0, 1);
-    glLineWidth(2.5);
+    glLineWidth(2.5 * scale_factor);
     glBegin(GL_LINE_STRIP);
     glVertex2f(354, 448);
     glVertex2f(346, 455);
@@ -610,7 +612,7 @@ void display_chick() {
     // draw little wings
 
     glColor4f(0, 0, 0, 1);
-    glLineWidth(2.5);
+    glLineWidth(2.5 * scale_factor);
     glEnable(GL_LINE_SMOOTH);
     // left
     glBegin(GL_LINE_STRIP);
@@ -666,8 +668,8 @@ void display_text() {
     glEnable(GL_POINT_SMOOTH);
     glEnable(GL_LINE_SMOOTH);
 
-    glPointSize(10);
-    glLineWidth(10);
+    glPointSize(10 * scale_factor);
+    glLineWidth(10 * scale_factor);
 
     glPushMatrix();
     glTranslatef(110, 680, 0);
