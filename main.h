@@ -85,4 +85,6 @@ void display_pointer();
 
 void reset_status();
 
+void display_text();
+
 #endif //BIRTHDAY_CARD_MAIN_H

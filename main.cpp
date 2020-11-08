@@ -54,6 +54,10 @@ void display() {
 
     display_background();
     display_egg();
+    if (egg_status == E) {
+        display_chick();
+        display_text();
+    }
     display_pointer();
 
     glutSwapBuffers();
@@ -269,9 +273,6 @@ void init_floral() {
         // random rotation
         ptr->rotation = random_float(-180, 180);
         // random color
-//        ptr->color[0] = random_float(0, 1);
-//        ptr->color[1] = random_float(0, 1);
-//        ptr->color[2] = random_float(0, 1);
         switch (random_int(0, 4)) {
             case 0:
                 ptr->color[0] = 224 / 255.0;
@@ -377,10 +378,6 @@ void display_egg() {
     // display egg crack
     if (egg_status != A) {
         display_egg_crack();
-    }
-
-    if (egg_status == E) {
-        display_chick();
     }
 
     // draw highlight
@@ -652,4 +649,44 @@ void display_chick() {
 
 void reset_status() {
     egg_status = A;
+}
+
+void display_text() {
+    // use glutStrokeCharacter support cs temporarily
+    glMatrixMode(GL_PROJECTION); // change matrix mode
+    glLoadIdentity();   // reset projection matrix
+    gluOrtho2D(0, APP_WIDTH, 0, APP_HEIGHT); // use custom coordination system
+    glMatrixMode(GL_MODELVIEW);
+
+    glEnable(GL_POINT_SMOOTH);
+    glEnable(GL_LINE_SMOOTH);
+
+    glPointSize(10);
+    glLineWidth(10);
+
+    glPushMatrix();
+    glTranslatef(110, 680, 0);
+    const char* happy = "HAPPY";
+    glColor4f(0, 0, 0, 1);
+    while (*happy != '\0') {
+        glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, *happy);
+        happy++;
+    }
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(24, 120, 0);
+    glScalef(.8, .8, 0);
+    const char* birthday = "BIRTHDAY";
+    glColor4f(0, 0, 0, 1);
+    while (*birthday != '\0') {
+        glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, *birthday);
+        birthday++;
+    }
+    glPopMatrix();
+
+    glDisable(GL_POINT_SMOOTH);
+    glDisable(GL_LINE_SMOOTH);
+
+    use_absolute_cs();  // restore previous cs
 }
