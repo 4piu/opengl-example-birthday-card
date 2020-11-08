@@ -32,6 +32,8 @@
 #define BEAM_WIDTH_DEG 12
 #define BEAM_ANIMATE_SPEED 0.1
 
+#define CURSOR_SCALE .4
+
 // type def
 
 typedef struct {
@@ -84,7 +86,7 @@ void display_egg();
 
 void display_background();
 
-void display_pointer();
+void display_cursor();
 
 void reset_status();
 

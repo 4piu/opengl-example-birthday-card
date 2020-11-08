@@ -67,7 +67,7 @@ void display() {
         display_chick();
         display_text();
     }
-    display_pointer();
+    display_cursor();
 
     glutSwapBuffers();
 }
@@ -239,16 +239,82 @@ void display_background() {
 
 }
 
-void display_pointer() {
+void display_cursor() {
+    glPushMatrix();
+    glTranslatef(mouse_pointer.x, mouse_pointer.y, 0);
+    glPointSize(10.0 * CURSOR_SCALE * scale_factor);
+    glLineWidth(10.0 * CURSOR_SCALE * scale_factor);
+    glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_POINT_SMOOTH);
+    glScalef(CURSOR_SCALE, CURSOR_SCALE, 0);
     if (hover_on_egg) {
-        glColor4f(255 / 255.0, 0 / 255.0, 255 / 255.0, 1);
+        int cursor[][2] = {{25, 62},
+                           {25, 9},
+                           {30, 3},
+                           {35, 3},
+                           {40, 9},
+                           {40, 50},
+                           {40, 33},
+                           {45, 27},
+                           {50, 27},
+                           {55, 33},
+                           {55, 50},
+                           {55, 37},
+                           {60, 31},
+                           {65, 31},
+                           {70, 37},
+                           {70, 50},
+                           {70, 42},
+                           {75, 36},
+                           {80, 36},
+                           {85, 42},
+                           {85, 77},
+                           {77, 87},
+                           {71, 93},
+                           {62, 97},
+                           {40, 97},
+                           {29, 93},
+                           {21, 84},
+                           {2,  51},
+                           {4,  46},
+                           {8,  42},
+                           {13, 42},
+                           {25, 62}};
+        glColor4f(1, 1, 1, 1);
+        glBegin(GL_POLYGON);
+        for (auto &point : cursor) glVertex2f(point[0], point[1]);
+        glEnd();
+        glColor4f(0, 0, 0, 1);
+        glBegin(GL_LINE_STRIP);
+        for (auto &point: cursor) glVertex2f(point[0], point[1]);
+        glEnd();
+        glBegin(GL_POINTS);
+        for (auto &point: cursor) glVertex2f(point[0], point[1]);
+        glEnd();
     } else {
-        glColor4f(255 / 255.0, 255 / 255.0, 255 / 255.0, 1);
+        int cursor[][2] = {{0,  0},
+                           {34, 83},
+                           {48, 62},
+                           {78, 91},
+                           {91, 78},
+                           {62, 48},
+                           {83, 34},
+                           {0,  0}};
+        glColor4f(1, 1, 1, 1);
+        glBegin(GL_POLYGON);
+        for (auto &point : cursor) glVertex2f(point[0], point[1]);
+        glEnd();
+        glColor4f(0, 0, 0, 1);
+        glBegin(GL_LINE_STRIP);
+        for (auto &point : cursor) glVertex2f(point[0], point[1]);
+        glEnd();
+        glBegin(GL_POINTS);
+        for (auto &point : cursor) glVertex2f(point[0], point[1]);
+        glEnd();
     }
-    glPointSize(10 * scale_factor);
-    glBegin(GL_POINTS);
-    glVertex2f(mouse_pointer.x, mouse_pointer.y);
-    glEnd();
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_POINT_SMOOTH);
+    glPopMatrix();
 }
 
 void draw_floral(floral *f) {
