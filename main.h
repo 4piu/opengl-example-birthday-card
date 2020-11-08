@@ -4,7 +4,6 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <cmath>
-#include <random>
 
 // macros
 #define PI 3.14159265358979323846
@@ -18,6 +17,13 @@
 #define FLORAL_SIZE_MAX 12
 #define FLORAL_ANIMATION_SPEED .01
 #define FLORAL_MOUSE_SENSITIVITY 15
+
+#define BALLOON_COUNT 40
+#define BALLOON_WIDTH 80
+#define BALLOON_HEIGHT 100
+#define BALLOON_ALPHA .7
+#define BALLOON_MAX_INIT_SPEED 5
+#define BALLOON_SPEED_INCREMENT .05
 
 #define EGG_X APP_WIDTH / 2.0
 #define EGG_Y APP_HEIGHT / 2.0 + 50
@@ -52,7 +58,13 @@ typedef struct {
         TRIANGLE, CIRCLE, SQUARE
     } shape;
     bool fading;
-} floral;
+} Floral;
+
+typedef struct {
+    Point position;
+    float color[3];
+    float speed;
+} Balloon;
 
 // function declarations
 
@@ -74,7 +86,7 @@ void motion_handler(int, int);
 
 void init_floral();
 
-void draw_floral(floral *);
+void draw_floral(Floral *);
 
 void animate_floral();
 
@@ -105,5 +117,13 @@ void animate_eyes();
 void display_poof();
 
 void animate_poof();
+
+void init_balloon();
+
+void draw_balloon(Balloon);
+
+void display_balloon();
+
+void animate_balloon();
 
 #endif //BIRTHDAY_CARD_MAIN_H

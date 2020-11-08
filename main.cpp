@@ -4,7 +4,9 @@
 // global vars
 Point mouse_pointer = {0, 0};
 Point ref_point = {0, 0};
-floral bk_decorations[FLORAL_COUNT];
+Floral bk_decorations[FLORAL_COUNT];
+Balloon balloons[BALLOON_COUNT];
+bool balloon_released = false;
 enum Color {
     PINK, BLUE, YELLOW, GREEN, WHITE
 } bk_color = YELLOW;
@@ -51,6 +53,7 @@ int main(int argc, char *argv[]) {
 
     // init global vars
     init_floral();
+    init_balloon();
 
     glutMainLoop(); // m4k3 17 r41n
     return 0;
@@ -69,6 +72,7 @@ void display() {
         display_chick();
         display_text();
     }
+    display_balloon();
     display_cursor();
     display_poof();
 
@@ -184,6 +188,7 @@ void timer_handler(int) {
     animate_beam();
     animate_eyes();
     animate_poof();
+    animate_balloon();
     glutPostRedisplay();    // redraw content
     glutTimerFunc(1000 / 60, timer_handler, 0);
 }
@@ -234,8 +239,8 @@ void display_background() {
     }
     glEnd();
 
-    floral *ptr = bk_decorations;
-    floral *end_ptr = bk_decorations + sizeof(bk_decorations) / sizeof(bk_decorations[0]);
+    Floral *ptr = bk_decorations;
+    Floral *end_ptr = bk_decorations + sizeof(bk_decorations) / sizeof(bk_decorations[0]);
     while (ptr < end_ptr) {
         draw_floral(ptr);
         ptr++;
@@ -321,7 +326,7 @@ void display_cursor() {
     glPopMatrix();
 }
 
-void draw_floral(floral *f) {
+void draw_floral(Floral *f) {
     glPushMatrix(); // save previous cs
     glTranslatef(f->position.x - ref_point.x * FLORAL_MOUSE_SENSITIVITY,
                  f->position.y - ref_point.y * FLORAL_MOUSE_SENSITIVITY, 0);  // move to new cs
@@ -330,16 +335,16 @@ void draw_floral(floral *f) {
     glColor4f(f->color[0], f->color[1], f->color[2], f->alpha);
     glEnable(GL_POLYGON_SMOOTH);    // smooth
     switch (f->shape) {
-        case floral::SQUARE:
+        case Floral::SQUARE:
             glRectf(-f->size / 2, -f->size / 2, f->size / 2, f->size / 2);
             break;
-        case floral::TRIANGLE:
+        case Floral::TRIANGLE:
             glBegin(GL_TRIANGLES);
             glVertex2f(-f->size * std::sqrt(3) / 2, -f->size / 2);
             glVertex2f(f->size * std::sqrt(3) / 2, -f->size / 2);
             glVertex2f(0, f->size);
             break;
-        case floral::CIRCLE:
+        case Floral::CIRCLE:
             glBegin(GL_POLYGON);
             for (int i = 0; i < 360; i++) {
                 glVertex2f(f->size / 2 * cosf(i * PI / 180), f->size / 2 * sinf(i * PI / 180));
@@ -360,8 +365,8 @@ void use_absolute_cs() {
 }
 
 void init_floral() {
-    floral *ptr = bk_decorations;
-    floral *end_ptr = bk_decorations + sizeof(bk_decorations) / sizeof(bk_decorations[0]);
+    Floral *ptr = bk_decorations;
+    Floral *end_ptr = bk_decorations + sizeof(bk_decorations) / sizeof(bk_decorations[0]);
     while (ptr < end_ptr) {
         // random position
         ptr->position.x = random_int(FLORAL_MARGIN, APP_WIDTH - FLORAL_MARGIN);
@@ -401,15 +406,15 @@ void init_floral() {
         // random alpha
         ptr->alpha = random_float(.2, 1);
         // random Shape
-        ptr->shape = static_cast<floral::Shape>(random_int(0, RAND_MAX) % (floral::SQUARE + 1));
+        ptr->shape = static_cast<Floral::Shape>(random_int(0, RAND_MAX) % (Floral::SQUARE + 1));
         ptr->fading = random_bool();
         ptr++;
     }
 }
 
 void animate_floral() {
-    floral *ptr = bk_decorations;
-    floral *end_ptr = bk_decorations + sizeof(bk_decorations) / sizeof(bk_decorations[0]);
+    Floral *ptr = bk_decorations;
+    Floral *end_ptr = bk_decorations + sizeof(bk_decorations) / sizeof(bk_decorations[0]);
     while (ptr < end_ptr) {
         if (ptr->fading) {
             ptr->alpha -= FLORAL_ANIMATION_SPEED;
@@ -791,6 +796,8 @@ void reset_status() {
     egg_status = A;
     poof_step = 0;
     poof_opacity = 1;
+    init_balloon();
+    balloon_released = false;
 }
 
 void display_text() {
@@ -956,4 +963,93 @@ void display_poof() {
 void animate_poof() {
     if (egg_status == E && poof_step < 100) poof_step += POOF_SPEED;
     if (poof_step >= 100) poof_opacity -= POOF_SPEED / 200.0;
+}
+
+void init_balloon() {
+    for (Balloon &b : balloons) {
+        b.position = Point{random_float(0, APP_WIDTH),
+                           random_float(APP_HEIGHT, 2 * APP_HEIGHT)};
+        b.speed = random_float(0, BALLOON_MAX_INIT_SPEED);
+        switch (random_int(0, 5)) {
+            case 0: // red
+                b.color[0] = 224 / 255.0;
+                b.color[1] = 27 / 255.0;
+                b.color[2] = 57 / 255.0;
+                break;
+            case 1: // green
+                b.color[0] = 131 / 255.0;
+                b.color[1] = 181 / 255.0;
+                b.color[2] = 14 / 255.0;
+                break;
+            case 2: // yellow
+                b.color[0] = 227 / 255.0;
+                b.color[1] = 180 / 255.0;
+                b.color[2] = 9 / 255.0;
+                break;
+            case 3: // orange
+                b.color[0] = 245 / 255.0;
+                b.color[1] = 125 / 255.0;
+                b.color[2] = 211 / 255.0;
+                break;
+            case 4: // pink
+                b.color[0] = 245 / 255.0;
+                b.color[1] = 160 / 255.0;
+                b.color[2] = 32 / 255.0;
+                break;
+            case 5: // cyan
+                b.color[0] = 26 / 255.0;
+                b.color[1] = 210 / 255.0;
+                b.color[2] = 219 / 255.0;
+                break;
+        }
+    }
+}
+
+void draw_balloon(Balloon b) {
+
+    // draw ellipse
+    draw_ellipse(b.position.x,
+                 b.position.y + BALLOON_HEIGHT / 2.0,
+                 0,
+                 BALLOON_WIDTH / 2,
+                 BALLOON_HEIGHT / 2,
+                 new float[4]{b.color[0], b.color[1], b.color[2], BALLOON_ALPHA});
+    // outline
+    // highlight
+    draw_ellipse(b.position.x - BALLOON_WIDTH * .3,
+                 b.position.y + BALLOON_HEIGHT * .3,
+                 26,
+                 BALLOON_WIDTH * .1,
+                 BALLOON_HEIGHT * .15,
+                 new float[4]{1, 1, 1, .5});
+    // bottom
+    glColor4f(b.color[0], b.color[1], b.color[2], BALLOON_ALPHA);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(b.position.x, b.position.y + BALLOON_HEIGHT * .98);
+    glVertex2f(b.position.x - BALLOON_WIDTH * .1, b.position.y + BALLOON_HEIGHT * 1.1);
+    glVertex2f(b.position.x + BALLOON_WIDTH * .1, b.position.y + BALLOON_HEIGHT * 1.1);
+    glEnd();
+    glColor4f(.4, .4, .4, .6);
+    glLineWidth(1 * scale_factor);
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(b.position.x, b.position.y + BALLOON_HEIGHT);
+    glVertex2f(b.position.x, b.position.y + BALLOON_HEIGHT * 2.5);
+    glEnd();
+}
+
+void display_balloon() {
+    if (!balloon_released) return;
+    for (Balloon &b : balloons) draw_balloon(b);
+}
+
+void animate_balloon() {
+    if (!balloon_released && poof_step >= 100) balloon_released = true;
+    if (balloon_released) {
+        for (Balloon &b : balloons) {
+            if (b.position.y >= -APP_HEIGHT - BALLOON_HEIGHT * 3) {
+                b.position.y -= b.speed;
+                b.speed += BALLOON_SPEED_INCREMENT;
+            }
+        }
+    }
 }
