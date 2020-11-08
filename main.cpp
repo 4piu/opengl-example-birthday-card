@@ -8,7 +8,12 @@ floral bk_decorations[FLORAL_COUNT];
 enum Color {
     PINK, BLUE, YELLOW, GREEN, WHITE
 } bk_color = YELLOW;
-enum EggStatus {A, B, C, D, E} egg_status = A;
+enum EggStatus {
+    A, B, C, D, E
+} egg_status = A;
+bool hover_on_egg = false;
+
+// implementations
 
 int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
@@ -206,8 +211,11 @@ void display_background() {
 }
 
 void display_pointer() {
-    // TODO
-    glColor4f(255 / 255.0, 255 / 255.0, 255 / 255.0, 1);
+    if (hover_on_egg) {
+        glColor4f(255 / 255.0, 0 / 255.0, 255 / 255.0, 1);
+    } else {
+        glColor4f(255 / 255.0, 255 / 255.0, 255 / 255.0, 1);
+    }
     glPointSize(10);
     glBegin(GL_POINTS);
     glVertex2f(mouse_pointer.x, mouse_pointer.y);
