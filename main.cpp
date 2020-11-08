@@ -93,6 +93,7 @@ void keyboard_handler(unsigned char key, int, int) {
                 bk_color = PINK;
             }
             break;
+        default:;
     }
 }
 
@@ -114,10 +115,11 @@ void special_handler(int key, int, int) {
                 bk_color = PINK;
             }
             break;
+        default:;
     }
 }
 
-void mouse_handler(int btn, int state, int x, int y) {
+void mouse_handler(int btn, int state, int, int) {
     // egg click event
     if (btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN && hover_on_egg) {
         if (egg_status != E) {
@@ -250,8 +252,8 @@ void draw_floral(floral *f) {
             break;
         case floral::CIRCLE:
             glBegin(GL_POLYGON);
-            for (float i = 0; i < 2 * PI; i += PI / 360) {
-                glVertex2f(f->size / 2 * cosf(i), f->size / 2 * sinf(i));
+            for (int i = 0; i < 360; i++) {
+                glVertex2f(f->size / 2 * cosf(i * PI / 180), f->size / 2 * sinf(i * PI / 180));
             }
             break;
     }
@@ -310,7 +312,7 @@ void init_floral() {
         // random alpha
         ptr->alpha = random_float(.2, 1);
         // random Shape
-        ptr->shape = static_cast<floral::Shape>(rand() % (floral::SQUARE + 1));
+        ptr->shape = static_cast<floral::Shape>(random_int(0, RAND_MAX) % (floral::SQUARE + 1));
         ptr->fading = random_bool();
         ptr++;
     }
