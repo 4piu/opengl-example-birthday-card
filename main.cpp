@@ -125,10 +125,23 @@ void special_handler(int key, int, int) {
 
 void mouse_handler(int btn, int state, int, int) {
     // egg click event
-    if (btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN && hover_on_egg) {
+    if (btn == GLUT_LEFT_BUTTON &&
+        state == GLUT_DOWN &&
+        hover_on_egg) {
         if (egg_status != E) {
             egg_status = static_cast<EggStatus>(static_cast<int>(egg_status) + 1);
         }
+    }
+    if (egg_status == E &&
+        btn == GLUT_LEFT_BUTTON &&
+        state == GLUT_DOWN &&
+        hover_on_egg) {
+        eye_status = CLOSE;
+    }
+    if (btn == GLUT_LEFT_BUTTON &&
+        state == GLUT_UP &&
+        egg_status == E) {
+        eye_status = OPEN;
     }
 }
 
@@ -602,9 +615,30 @@ void display_chick() {
                          5, 8, new float[4]{0, 0, 0, 1});
             glDisable(GL_POLYGON_SMOOTH);
             break;
-        case BLINK:
-            break;
         case CLOSE:
+            glPushMatrix();
+            glTranslatef(ref_point.x * CHICK_ANIMATION_SENSITIVITY,
+                         ref_point.y * CHICK_ANIMATION_SENSITIVITY,
+                         0);
+
+            glColor4f(0, 0, 0, 1);
+            glLineWidth(1.5 * scale_factor);
+            glEnable(GL_LINE_SMOOTH);
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(316, 417);
+            glVertex2f(331, 422);
+            glVertex2f(316, 425);
+            glEnd();
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(394, 419);
+            glVertex2f(382, 422);
+            glVertex2f(394, 429);
+            glEnd();
+            glDisable(GL_LINE_SMOOTH);
+
+            glPopMatrix();
+            break;
+        case BLINK:
             break;
     }
 
