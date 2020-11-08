@@ -455,7 +455,7 @@ void display_egg_crack() {
 }
 
 void display_chick() {
-    glColor4f(235 / 255.0, 209 / 255.0, 101 / 255.0, 1);
+    glColor4f(235 / 255.0, 209 / 255.0, 101 / 255.0, 1);    // yellow
 
     // draw body
     // must arrange the point wisely or the triangles may overlap
@@ -540,6 +540,37 @@ void display_chick() {
     glEnd();
 
     // draw feet
+    draw_ellipse(312, 623, -20, 10, 16,
+                 new float[4] {235 / 255.0, 209 / 255.0, 101 / 255.0, 1});
+    draw_ellipse(412, 628, 20, 10, 16,
+                 new float[4] {235 / 255.0, 209 / 255.0, 101 / 255.0, 1});
+
+    glColor4f(74 / 255.0, 51 / 255.0, 33 / 255.0, 1);   // brown
+    glEnable(GL_LINE_SMOOTH);
+    glLineWidth(6);
+
+    // left foot
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(319, 640);
+    glVertex2f(310, 623);
+    glVertex2f(297, 615);
+    glEnd();
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(310, 623);
+    glVertex2f(315, 609);
+    glEnd();
+    // right foot
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(412, 646);
+    glVertex2f(420, 629);
+    glVertex2f(436, 620);
+    glEnd();
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(420, 629);
+    glVertex2f(419, 613);
+    glEnd();
+
+    glDisable(GL_LINE_SMOOTH);
 }
 
 void reset_status() {
