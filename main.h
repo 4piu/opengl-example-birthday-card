@@ -27,6 +27,8 @@
 #define EGG_HIGHLIGHT_SIZE 80
 #define EGG_SHADOW_SIZE 120
 
+// type def
+
 typedef struct {
     GLfloat x, y;
 } Point;

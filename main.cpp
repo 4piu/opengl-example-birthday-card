@@ -38,8 +38,9 @@ int main(int argc, char *argv[]) {
     glEnable(GL_MULTISAMPLE);
 
     // enable blend (rgba and smooth support)
-    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+
     // init global vars
     init_floral();
 
@@ -381,7 +382,7 @@ void display_egg() {
         draw_ellipse(EGG_X + ref_point.x * 80,
                      EGG_Y - 60,
                      0 - ref_point.x * 40,
-                     i * (1 - abs(ref_point.x) * .8),
+                     i * (1 - abs(ref_point.x) * .9),
                      i,
                      new float[4]{.95, .95, .95, 0.04});
     }
