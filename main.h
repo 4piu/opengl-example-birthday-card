@@ -34,6 +34,8 @@
 
 #define CURSOR_SCALE .4
 
+#define POOF_SPEED 2.5
+
 // type def
 
 typedef struct {
@@ -99,5 +101,9 @@ void animate_beam();
 void count_frame();
 
 void animate_eyes();
+
+void display_poof();
+
+void animate_poof();
 
 #endif //BIRTHDAY_CARD_MAIN_H

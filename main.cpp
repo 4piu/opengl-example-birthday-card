@@ -18,6 +18,8 @@ int frame_counter = 0;  // loop from 0-300 (5s)
 enum EyeStatus {
     OPEN, BLINK, CLOSE
 } eye_status = OPEN;
+float poof_step = 0;
+float poof_opacity = 1;
 
 // implementations
 
@@ -63,11 +65,12 @@ void display() {
         display_beam();
     }
     display_egg();
-    if (egg_status == E) {
+    if (egg_status == E && poof_step >= 100) {
         display_chick();
         display_text();
     }
     display_cursor();
+    display_poof();
 
     glutSwapBuffers();
 }
@@ -180,6 +183,7 @@ void timer_handler(int) {
     animate_floral();
     animate_beam();
     animate_eyes();
+    animate_poof();
     glutPostRedisplay();    // redraw content
     glutTimerFunc(1000 / 60, timer_handler, 0);
 }
@@ -785,6 +789,8 @@ void display_chick() {
 
 void reset_status() {
     egg_status = A;
+    poof_step = 0;
+    poof_opacity = 1;
 }
 
 void display_text() {
@@ -856,4 +862,98 @@ void count_frame() {
 void animate_eyes() {
     if (frame_counter % 120 < 2 && eye_status == OPEN) eye_status = BLINK;
     else if (eye_status == BLINK) eye_status = OPEN;
+}
+
+void display_poof() {
+    if (egg_status != E || poof_opacity <= 0) return;
+    int poof[][2] = {{0,    -29},
+                     {9,    -43},
+                     {24,   -49},
+                     {44,   -50},
+                     {64,   -45},
+                     {72,   -35},
+                     {74,   -20},
+                     {72,   -12},
+                     {86,   -16},
+                     {101,  -18},
+                     {110,  -7},
+                     {111,  10},
+                     {106,  20},
+                     {98,   27},
+                     {89,   29},
+                     {70,   29},
+                     {64,   28},
+                     {62,   40},
+                     {53,   51},
+                     {37,   54},
+                     {18,   49},
+                     {6,    44},
+                     {1,    33},
+                     {-1,   43},
+                     {-7,   49},
+                     {-16,  52},
+                     {-29,  51},
+                     {-39,  44},
+                     {-40,  42},
+                     {-47,  47},
+                     {-66,  55},
+                     {-84,  55},
+                     {-99,  51},
+                     {-103, 41},
+                     {-99,  30},
+                     {-89,  20},
+                     {-81,  14},
+                     {-68,  11},
+                     {-81,  8},
+                     {-89,  0},
+                     {-90,  -11},
+                     {-86,  -20},
+                     {-75,  -28},
+                     {-64,  -29},
+                     {-54,  -29},
+                     {-44,  -24},
+                     {-48,  -30},
+                     {-50,  -39},
+                     {-41,  -48},
+                     {-29,  -51},
+                     {-19,  -48},
+                     {-8,   -41},
+                     {0,    -29}};
+    glPushMatrix();
+    glTranslatef(APP_WIDTH / 2.0, APP_HEIGHT / 2.0, 0);
+    glScalef(20 * pow(poof_step / 100.0, 2),
+             20 * pow(poof_step / 100.0, 2),
+             0);
+    glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_POINT_SMOOTH);
+    glPointSize(5 * scale_factor);
+    glLineWidth(5 * scale_factor);
+
+    glColor4f(1, 1, 1, poof_opacity);
+    glBegin(GL_POLYGON);
+    glVertex2f(0, 14);   // fix triangle overlap
+    for (auto &point : poof) {
+        glVertex2f(point[0], point[1]);
+    }
+    glEnd();
+    glColor4f(0, 0, 0, 1);
+    glBegin(GL_LINE_STRIP);
+    for (auto &point : poof) {
+        glVertex2f(point[0], point[1]);
+    }
+    glEnd();
+    glBegin(GL_POINTS);
+    for (auto &point : poof) {
+        glVertex2f(point[0], point[1]);
+    }
+    glEnd();
+
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_POINT_SMOOTH);
+    glPopMatrix();
+}
+
+void animate_poof() {
+    if (egg_status == E && poof_step < 100) poof_step += POOF_SPEED;
+    if (poof_step >= 100) poof_opacity -= POOF_SPEED / 200.0;
 }
