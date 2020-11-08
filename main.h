@@ -94,4 +94,8 @@ void display_beam();
 
 void animate_beam();
 
+void count_frame();
+
+void animate_eyes();
+
 #endif //BIRTHDAY_CARD_MAIN_H

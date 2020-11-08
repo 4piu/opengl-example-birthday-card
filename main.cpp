@@ -14,6 +14,10 @@ enum EggStatus {
 bool hover_on_egg = false;
 float beam_rotation = 0;
 float scale_factor = 1;
+int frame_counter = 0;  // loop from 0-300 (5s)
+enum EyeStatus {
+    OPEN, BLINK, CLOSE
+} eye_status = OPEN;
 
 // implementations
 
@@ -159,8 +163,10 @@ void reshape_handler(int w, int h) {
 }
 
 void timer_handler(int) {
+    count_frame();
     animate_floral();
     animate_beam();
+    animate_eyes();
     glutPostRedisplay();    // redraw content
     glutTimerFunc(1000 / 60, timer_handler, 0);
 }
@@ -583,16 +589,24 @@ void display_chick() {
     // draw face
 
     // draw eyes
-    glEnable(GL_POLYGON_SMOOTH);
-    draw_ellipse(326 + ref_point.x * CHICK_ANIMATION_SENSITIVITY,
-                 423 + ref_point.y * CHICK_ANIMATION_SENSITIVITY,
-                 10 - ref_point.x * 10,
-                 5, 8, new float[4]{0, 0, 0, 1});
-    draw_ellipse(385 + ref_point.x * CHICK_ANIMATION_SENSITIVITY,
-                 423 + ref_point.y * CHICK_ANIMATION_SENSITIVITY,
-                 10 - ref_point.x * 10,
-                 5, 8, new float[4]{0, 0, 0, 1});
-    glDisable(GL_POLYGON_SMOOTH);
+    switch (eye_status) {
+        case OPEN:
+            glEnable(GL_POLYGON_SMOOTH);
+            draw_ellipse(326 + ref_point.x * CHICK_ANIMATION_SENSITIVITY,
+                         423 + ref_point.y * CHICK_ANIMATION_SENSITIVITY,
+                         10 - ref_point.x * 10,
+                         5, 8, new float[4]{0, 0, 0, 1});
+            draw_ellipse(385 + ref_point.x * CHICK_ANIMATION_SENSITIVITY,
+                         423 + ref_point.y * CHICK_ANIMATION_SENSITIVITY,
+                         10 - ref_point.x * 10,
+                         5, 8, new float[4]{0, 0, 0, 1});
+            glDisable(GL_POLYGON_SMOOTH);
+            break;
+        case BLINK:
+            break;
+        case CLOSE:
+            break;
+    }
 
     // draw beak
     glPushMatrix();
@@ -719,4 +733,14 @@ void display_beam() {
 void animate_beam() {
     beam_rotation += BEAM_ANIMATE_SPEED;
     if (beam_rotation >= 360) beam_rotation -= 360;
+}
+
+void count_frame() {
+    frame_counter++;
+    if (frame_counter > 300) frame_counter -= 300;
+}
+
+void animate_eyes() {
+    if (frame_counter % 120 < 2 && eye_status == OPEN) eye_status = BLINK;
+    else if (eye_status == BLINK) eye_status = OPEN;
 }
