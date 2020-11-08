@@ -29,6 +29,9 @@
 
 #define CHICK_ANIMATION_SENSITIVITY 10
 
+#define BEAM_WIDTH_DEG 12
+#define BEAM_ANIMATE_SPEED 0.1
+
 // type def
 
 typedef struct {
@@ -86,5 +89,9 @@ void display_pointer();
 void reset_status();
 
 void display_text();
+
+void display_beam();
+
+void animate_beam();
 
 #endif //BIRTHDAY_CARD_MAIN_H

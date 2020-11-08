@@ -12,6 +12,7 @@ enum EggStatus {
     A, B, C, D, E
 } egg_status = A;
 bool hover_on_egg = false;
+float beam_rotation = 0;
 
 // implementations
 
@@ -53,6 +54,9 @@ void display() {
     use_absolute_cs();
 
     display_background();
+    if (egg_status == E) {
+        display_beam();
+    }
     display_egg();
     if (egg_status == E) {
         display_chick();
@@ -152,6 +156,7 @@ void reshape_handler(int w, int h) {
 
 void timer_handler(int) {
     animate_floral();
+    animate_beam();
     glutPostRedisplay();    // redraw content
     glutTimerFunc(1000 / 60, timer_handler, 0);
 }
@@ -637,13 +642,13 @@ void display_chick() {
         draw_ellipse(297 + ref_point.x * CHICK_ANIMATION_SENSITIVITY,
                      444 + ref_point.y * CHICK_ANIMATION_SENSITIVITY,
                      0, size, size * .5,
-                     new float[4] {240 / 255.0, 68 / 255.0, 115 / 255.0, 0.05});
+                     new float[4]{240 / 255.0, 68 / 255.0, 115 / 255.0, 0.05});
     }
     for (int size = 14; size > 4; size -= 2) {
         draw_ellipse(410 + ref_point.x * CHICK_ANIMATION_SENSITIVITY,
                      444 + ref_point.y * CHICK_ANIMATION_SENSITIVITY,
                      0, size, size * .5,
-                     new float[4] {240 / 255.0, 68 / 255.0, 115 / 255.0, 0.05});
+                     new float[4]{240 / 255.0, 68 / 255.0, 115 / 255.0, 0.05});
     }
 }
 
@@ -666,7 +671,7 @@ void display_text() {
 
     glPushMatrix();
     glTranslatef(110, 680, 0);
-    const char* happy = "HAPPY";
+    const char *happy = "HAPPY";
     glColor4f(0, 0, 0, 1);
     while (*happy != '\0') {
         glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, *happy);
@@ -677,7 +682,7 @@ void display_text() {
     glPushMatrix();
     glTranslatef(24, 120, 0);
     glScalef(.8, .8, 0);
-    const char* birthday = "BIRTHDAY";
+    const char *birthday = "BIRTHDAY";
     glColor4f(0, 0, 0, 1);
     while (*birthday != '\0') {
         glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, *birthday);
@@ -689,4 +694,25 @@ void display_text() {
     glDisable(GL_LINE_SMOOTH);
 
     use_absolute_cs();  // restore previous cs
+}
+
+void display_beam() {
+    glPushMatrix();
+    glTranslatef(APP_WIDTH / 2.0, APP_HEIGHT / 2.0, 0);
+    glRotatef(beam_rotation, 0, 0, 1);
+    glColor4f(1, 1, 1, .3);
+    for (int i = 0; i < 360 / BEAM_WIDTH_DEG; i++) {
+        glBegin(GL_TRIANGLES);
+        glVertex2f(0, 0);
+        glVertex2f(APP_HEIGHT * tan(BEAM_WIDTH_DEG / 2.0 * PI / 180), APP_HEIGHT);
+        glVertex2f(-APP_HEIGHT * tan(BEAM_WIDTH_DEG / 2.0 * PI / 180), APP_HEIGHT);
+        glEnd();
+        glRotatef(BEAM_WIDTH_DEG * 2, 0, 0, 1);
+    }
+    glPopMatrix();
+}
+
+void animate_beam() {
+    beam_rotation += BEAM_ANIMATE_SPEED;
+    if (beam_rotation >= 360) beam_rotation -= 360;
 }
