@@ -64,7 +64,7 @@ void display() {
     use_absolute_cs();
 
     display_background();
-    if (egg_status == E) {
+    if (egg_status == E && poof_step >= 100) {
         display_beam();
     }
     display_egg();
